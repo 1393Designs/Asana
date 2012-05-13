@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingLeft="5px"
+	android:paddingRight="5px"
+	>
+
+	<TextView android:id="@+id/apiKeyInstructions"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Hiya!  You'll need to get your API key from http://app.asana.com/-/account_api and paste it in this box to get started." />
+
+	<EditText android:id="@+id/apiKeyEntry"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:hint="Paste your API key here!"
+		android:layout_below="@id/apiKeyInstructions" />
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/apiKeyEntry" >
+
+		<Button android:id="@+id/okayButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:paddingLeft="20px"
+			android:paddingRight="20px"
+			android:text="Okay" />
+
+		<Button android:id="@+id/cancelButton"
+			android:layout_below="@id/apiKeyEntry"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:paddingLeft="20px"
+			android:paddingRight="20px"
+			android:text="Cancel" />
+	</LinearLayout>
+</RelativeLayout>

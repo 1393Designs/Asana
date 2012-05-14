@@ -4,6 +4,7 @@
 	android:layout_height="wrap_content"
 	android:paddingLeft="5px"
 	android:paddingRight="5px"
+	android:id="@+id/apiKeyDialogView"
 	>
 
 	<TextView android:id="@+id/apiKeyInstructions"
@@ -17,27 +18,4 @@
 		android:singleLine="true"
 		android:hint="Paste your API key here!"
 		android:layout_below="@id/apiKeyInstructions" />
-
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/apiKeyEntry" >
-
-		<Button android:id="@+id/okayButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:paddingLeft="20px"
-			android:paddingRight="20px"
-			android:text="Okay" />
-
-		<Button android:id="@+id/cancelButton"
-			android:layout_below="@id/apiKeyEntry"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:paddingLeft="20px"
-			android:paddingRight="20px"
-			android:text="Cancel" />
-	</LinearLayout>
 </RelativeLayout>

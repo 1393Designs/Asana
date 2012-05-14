@@ -3,11 +3,18 @@ package com.designs_1393.asana;
 import android.os.Bundle;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.widget.FrameLayout;
 
 // Dialogs
 import android.app.Dialog;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.text.util.Linkify;
-import android.view.View.OnClickListener;
+//import android.view.View.OnClickListener;
 
 // Widgets
 import android.widget.TextView;
@@ -31,39 +38,38 @@ public class Asana extends SherlockActivity
 
 	private void getUserApiKey()
 	{
-		final Dialog apiKeyDialog = new Dialog( Asana.this );
-		apiKeyDialog.setContentView(R.layout.apikeydialog);
-		apiKeyDialog.setTitle("Asana API Key");
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = getLayoutInflater();
+		View dialoglayout = inflater.inflate(R.layout.apikeydialog,
+			(ViewGroup) getCurrentFocus());
+		dialogBuilder.setView( dialoglayout );
 
-		final TextView instructionsText = (TextView)
-			apiKeyDialog.findViewById(R.id.apiKeyInstructions);
 		final EditText apiKeyInput = (EditText)
-			apiKeyDialog.findViewById(R.id.apiKeyEntry);
+			dialoglayout.findViewById(R.id.apiKeyEntry);
+		final TextView apiInstructions = (TextView)
+			dialoglayout.findViewById(R.id.apiKeyInstructions);
 
-		Button okayButton   = (Button)
-			apiKeyDialog.findViewById(R.id.okayButton);
-		Button cancelButton = (Button)
-			apiKeyDialog.findViewById(R.id.cancelButton);
+		Linkify.addLinks( apiInstructions, Linkify.WEB_URLS );
 
-		okayButton.setOnClickListener( new OnClickListener() {
-			public void onClick( View v )
+		dialogBuilder.setCancelable( true );
+		dialogBuilder.setPositiveButton( "Okay", new DialogInterface.OnClickListener() {
+			public void onClick( DialogInterface dialog, int which )
 			{
+				if( sharedPrefs == null )
+					Log.i(TAG, "Shared prefs is null");
 				SharedPreferences.Editor editor = sharedPrefs.edit();
+				if( editor == null )
+					Log.i(TAG, "Editor is null");
 				editor.putString("api key", apiKeyInput.getText().toString());
 				editor.commit();
-				apiKeyDialog.dismiss();
 			}
 		});
 
-		cancelButton.setOnClickListener( new OnClickListener() {
-			public void onClick( View v )
-			{
-				apiKeyDialog.dismiss();
-			}
+		dialogBuilder.setNegativeButton( "Cancel", new DialogInterface.OnClickListener() {
+			public void onClick( DialogInterface dialog, int which ){}
 		});
 
-		Linkify.addLinks( instructionsText, Linkify.WEB_URLS );
-		apiKeyDialog.show();
+		dialogBuilder.create().show();
 	}
 
     /** Called when the activity is first created. */
@@ -89,12 +95,11 @@ public class Asana extends SherlockActivity
 			} catch( Exception e ){ Log.e(TAG, e.toString()); }
 		}
 
-
 		AsanaHelper ah = new AsanaHelper( sharedPrefs.getString("api key", "No API key.") );
 
 		ah.usePrettyPrint( true );
 
-		Log.i(TAG, "All workspaces:");
+		/*Log.i(TAG, "All workspaces:");
 		Log.i(TAG, "\t" +ah.getWorkspaces());
 
 		Log.i(TAG, "All projects in any workspace:");
@@ -105,6 +110,6 @@ public class Asana extends SherlockActivity
 
 		Log.i(TAG, "Create a task with name \"Android test\" to workspace \"1393 Designs\"");
 		Log.i(TAG, "\t" +ah.createTask( "Android test",
-			185645369321L ));
+			185645369321L ));*/
     }
 }

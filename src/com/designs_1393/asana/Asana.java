@@ -27,6 +27,11 @@ import android.content.SharedPreferences;
 // ActionBarSherlock
 import com.actionbarsherlock.app.SherlockActivity;
 
+// Jackson JSON
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.annotation.*;
+
 // Logging
 import android.util.Log;
 
@@ -96,13 +101,27 @@ public class Asana extends SherlockActivity
 		}
 
 		AsanaHelper ah = new AsanaHelper( sharedPrefs.getString("api key", "No API key.") );
-
 		ah.usePrettyPrint( true );
 
-		/*Log.i(TAG, "All workspaces:");
-		Log.i(TAG, "\t" +ah.getWorkspaces());
+		String workspacesJSON = ah.getWorkspaces();
 
-		Log.i(TAG, "All projects in any workspace:");
+		Log.i(TAG, "Starting deserialization");
+		ObjectMapper mapper = new ObjectMapper();
+
+		try{
+			WorkspaceSet workspaces = mapper.readValue( workspacesJSON, WorkspaceSet.class );
+
+			Workspace[] wArray = workspaces.getData();
+
+			for( int i = 0; i < wArray.length; i++ )
+			{
+				Log.i(TAG, "\tWorkspace ID = " +wArray[i].getID());
+				Log.i(TAG, "\tWorkspace name = " +wArray[i].getName());
+			}
+		} catch( Exception e) { Log.e(TAG, "Exception: " +e.toString() ); }
+		Log.i(TAG, "Finished deserialization");
+
+		/*Log.i(TAG, "All projects in any workspace:");
 		Log.i(TAG, "\t" +ah.getAllProjects());
 
 		Log.i(TAG, "All projects in workspace \"1393 Designs\":");

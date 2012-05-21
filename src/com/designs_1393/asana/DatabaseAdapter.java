@@ -11,9 +11,9 @@ public class DatabaseAdapter
 {
 	/* Database Attribute Declarations */
 	public static final String WORKSPACES_TABLE_NAME   = "workspaces";
+	public static final String WORKSPACES_KEY_ID       = "_id";
 	public static final String WORKSPACES_KEY_ASANA_ID = "workspace_id";
 	public static final String WORKSPACES_KEY_NAME     = "workspace_name";
-	public static final String WORKSPACES_KEY_ID       = "_id";
 
 	public static final String DATABASE_NAME           = "asana_data";
 	public static final int    DATABASE_VERSION        = 1;
@@ -89,6 +89,29 @@ public class DatabaseAdapter
 	public void close()
 	{
 		DBhelper.close();
+	}
+
+	/** Returns a cursor containing every element of the "workspaces" table,
+	 *  sorted either alphabetically or in the order they're in on the website.
+	 *  @param sortAlphabetically  Whether to return the workspaces in
+	 *                             alphabetical order or in the order they
+	 *                             appear on asana.com
+	 *
+	 *  @return                    Cursor containing the row ID, short name,
+	 *                             and Asana workspace ID for each workspace in
+	 *                             the table.
+	 */
+	public Cursor getWorkspaces( boolean sortAlphabetically )
+	{
+		String sorter = WORKSPACES_KEY_ASANA_ID;
+		if( sortAlphabetically )
+			sorter = WORKSPACES_KEY_NAME;
+
+		return DB.query( WORKSPACES_TABLE_NAME,
+			new String[] {WORKSPACES_KEY_ID,
+				WORKSPACES_KEY_ASANA_ID,
+				WORKSPACES_KEY_NAME},
+			null, null, null, null, sorter );
 	}
 
 	/** Sets the "workspaces" table to the data in the WorkspaceSet.

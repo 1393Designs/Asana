@@ -118,8 +118,20 @@ public class Asana extends SherlockActivity
 				Log.i(TAG, "\tWorkspace ID = " +wArray[i].getID());
 				Log.i(TAG, "\tWorkspace name = " +wArray[i].getName());
 			}
-		} catch( Exception e) { Log.e(TAG, "Exception: " +e.toString() ); }
+
+			DatabaseAdapter dbAdapter = new DatabaseAdapter( getApplicationContext() );
+			dbAdapter.open();
+			boolean successfulSet = dbAdapter.setWorkspaces( workspaces );
+			dbAdapter.close();
+
+			if( successfulSet )
+				Log.i( TAG, "DB set successful!" );
+			else
+				Log.i( TAG, "DB set failed. :(" );
+		} catch( Exception e) { e.printStackTrace(); }
 		Log.i(TAG, "Finished deserialization");
+
+
 
 		/*Log.i(TAG, "All projects in any workspace:");
 		Log.i(TAG, "\t" +ah.getAllProjects());

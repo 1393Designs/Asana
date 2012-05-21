@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Asana</string>
+	<string name="no_workspaces">There don\'t appear to be any workspaces.</string>
 </resources>

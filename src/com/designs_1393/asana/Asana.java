@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
+import android.database.Cursor;
+
 // Dialogs
 import android.app.Dialog;
 import android.app.AlertDialog;
@@ -26,6 +28,7 @@ import android.content.SharedPreferences;
 
 // ActionBarSherlock
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
 
 // Jackson JSON
 import com.fasterxml.jackson.core.*;
@@ -35,7 +38,7 @@ import com.fasterxml.jackson.annotation.*;
 // Logging
 import android.util.Log;
 
-public class Asana extends SherlockActivity
+public class Asana extends SherlockListActivity
 {
 	final String TAG = "Asana";
 	private SharedPreferences sharedPrefs;
@@ -43,7 +46,7 @@ public class Asana extends SherlockActivity
 
 	private void getUserApiKey()
 	{
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder( getApplicationContext() );
 		LayoutInflater inflater = getLayoutInflater();
 		View dialoglayout = inflater.inflate(R.layout.apikeydialog,
 			(ViewGroup) getCurrentFocus());
@@ -77,17 +80,23 @@ public class Asana extends SherlockActivity
 		dialogBuilder.create().show();
 	}
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView( R.layout.workspace_list );
 		ctx = getApplicationContext();
+
+		DatabaseAdapter dbAdapter = new DatabaseAdapter( ctx );
+		dbAdapter.open();
+		Cursor c = dbAdapter.getWorkspaces( true );
+
+		setListAdapter( new WorkspaceAdapter( ctx, c ) );
 
 		sharedPrefs = this.getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
 
+		/* Get user's API key if they have not yet provided it */
 		if( !sharedPrefs.contains("api key") )
 		{
 			getUserApiKey();
@@ -100,6 +109,8 @@ public class Asana extends SherlockActivity
 			} catch( Exception e ){ Log.e(TAG, e.toString()); }
 		}
 
+
+		/* Sample API call - gets workspaces. */
 		AsanaHelper ah = new AsanaHelper( sharedPrefs.getString("api key", "No API key.") );
 		ah.usePrettyPrint( true );
 
@@ -119,8 +130,6 @@ public class Asana extends SherlockActivity
 				Log.i(TAG, "\tWorkspace name = " +wArray[i].getName());
 			}
 
-			DatabaseAdapter dbAdapter = new DatabaseAdapter( getApplicationContext() );
-			dbAdapter.open();
 			boolean successfulSet = dbAdapter.setWorkspaces( workspaces );
 			dbAdapter.close();
 
@@ -142,5 +151,5 @@ public class Asana extends SherlockActivity
 		Log.i(TAG, "Create a task with name \"Android test\" to workspace \"1393 Designs\"");
 		Log.i(TAG, "\t" +ah.createTask( "Android test",
 			185645369321L ));*/
-    }
+	}
 }

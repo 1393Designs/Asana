@@ -35,23 +35,30 @@ public class WorkspacesFragment extends SherlockListFragment
 	private Cursor workspaceCursor;
 
 	private SharedPreferences sharedPrefs;
+	private DatabaseAdapter dbAdapter;
 
 	@Override
 	public void onActivityCreated(Bundle savedState)
 	{
 		super.onActivityCreated(savedState);
 
+		// store application context
 		ctx = getActivity().getApplicationContext();
 
-		DatabaseAdapter dbAdapter = new DatabaseAdapter( ctx );
+		// get and store workspaces from Asana
+		AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
+		aFacade.retreiveWorkspaces();
+
+		// get shared preferences containing API key
+		sharedPrefs = getActivity().getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
+
+		// set layout content from the cache database
+		dbAdapter = new DatabaseAdapter( ctx );
 		dbAdapter.open();
 		workspaceCursor = dbAdapter.getWorkspaces( true );
 		setListAdapter( new WorkspaceAdapter( ctx, workspaceCursor ) );
 
-		sharedPrefs = getActivity().getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
-
-		AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
-		aFacade.retreiveWorkspaces();
+		dbAdapter.close();
 	}
 
 	@Override

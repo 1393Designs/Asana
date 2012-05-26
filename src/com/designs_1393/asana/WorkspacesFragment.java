@@ -50,37 +50,8 @@ public class WorkspacesFragment extends SherlockListFragment
 
 		sharedPrefs = getActivity().getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
 
-		/* Sample API call - gets workspaces. */
-		AsanaHelper ah = new AsanaHelper( sharedPrefs.getString("api key", "No API key.") );
-		ah.usePrettyPrint( true );
-
-		String workspacesJSON = ah.getWorkspaces();
-
-		Log.i(APP_TAG, "Starting deserialization");
-		ObjectMapper mapper = new ObjectMapper();
-
-		try{
-			WorkspaceSet workspaces = mapper.readValue( workspacesJSON, WorkspaceSet.class );
-
-			Workspace[] wArray = workspaces.getData();
-
-			for( int i = 0; i < wArray.length; i++ )
-			{
-				Log.i(APP_TAG, "\tWorkspace ID = " +wArray[i].getID());
-				Log.i(APP_TAG, "\tWorkspace name = " +wArray[i].getName());
-			}
-
-			boolean successfulSet = dbAdapter.setWorkspaces( workspaces );
-			dbAdapter.close();
-
-			if( successfulSet )
-				Log.i( APP_TAG, "DB set successful!" );
-			else
-				Log.i( APP_TAG, "DB set failed. :(" );
-		} catch( Exception e) { e.printStackTrace(); }
-		Log.i(APP_TAG, "Finished deserialization");
-
-		Log.i( APP_TAG, "Fragment loaded!" );
+		AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
+		aFacade.retreiveWorkspaces();
 	}
 
 	@Override

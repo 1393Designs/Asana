@@ -1,5 +1,8 @@
 package com.designs_1393.asana.workspace;
 
+// Asana classes
+import com.designs_1393.asana.*;
+
 public class Workspace
 {
 	private long ID;

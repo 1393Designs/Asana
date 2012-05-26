@@ -1,5 +1,8 @@
 package com.designs_1393.asana.workspace;
 
+// Asana classes
+import com.designs_1393.asana.*;
+
 // General
 import android.os.Bundle;
 import android.content.Context;

@@ -1,5 +1,9 @@
 package com.designs_1393.asana.workspace;
 
+// Asana stuff (mainly R here)
+import com.designs_1393.asana.*;
+
+// Android stuff
 import android.widget.SimpleCursorAdapter;
 import android.content.Context;
 import android.database.Cursor;

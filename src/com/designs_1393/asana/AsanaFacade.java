@@ -1,5 +1,10 @@
 package com.designs_1393.asana;
 
+// Workspace classes
+import com.designs_1393.asana.workspace.Workspace;
+import com.designs_1393.asana.workspace.WorkspaceSet;
+
+// Android classes
 import android.content.Context;
 import android.content.SharedPreferences;
 

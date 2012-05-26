@@ -45,21 +45,21 @@ public class WorkspacesFragment extends SherlockListFragment
 		// store application context
 		ctx = getActivity().getApplicationContext();
 
-		// get and store workspaces from Asana
-		AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
-		aFacade.retreiveWorkspaces();
-
 		// get shared preferences containing API key
 		sharedPrefs = getActivity().getSharedPreferences(
 			"AsanaPrefs",
 			Context.MODE_PRIVATE);
 
+		// get and store workspaces from Asana
+		AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
+		aFacade.retreiveWorkspaces();
+
 		// set layout content from the cache database
 		dbAdapter = new DatabaseAdapter( ctx );
 		dbAdapter.open();
+
 		workspaceCursor = dbAdapter.getWorkspaces( true );
 		setListAdapter( new WorkspaceAdapter( ctx, workspaceCursor ) );
-
 		dbAdapter.close();
 	}
 

@@ -66,6 +66,16 @@ public class WorkspacesFragment extends SherlockListFragment
 	@Override
 	public void onListItemClick( ListView l, View v, int pos, long id )
 	{
-		Log.i( APP_TAG, "Item at position " +pos +" pressed!" );
+		Cursor tempCursor = workspaceCursor;
+		tempCursor.moveToPosition( pos );
+
+		String workspaceName =
+			tempCursor.getString(
+				tempCursor.getColumnIndexOrThrow(
+					DatabaseAdapter.WORKSPACES_KEY_NAME
+				)
+			);
+
+		Log.i( APP_TAG, workspaceName +" pressed!" );
 	}
 }

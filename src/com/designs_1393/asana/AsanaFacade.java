@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.*;
 public class AsanaFacade
 {
 	private SharedPreferences preferences;
-	private AsanaHelper ah;
+	private AsanaAPI ah;
 	private Context context;
 	private DatabaseAdapter dbAdapter;
 
@@ -34,7 +34,7 @@ public class AsanaFacade
 		preferences = prefs;
 		context = ctx;
 
-		ah = new AsanaHelper( preferences.getString(
+		ah = new AsanaAPI( preferences.getString(
 			"api key",
 			"No API key.") );
 		ah.usePrettyPrint( true ); // DBG

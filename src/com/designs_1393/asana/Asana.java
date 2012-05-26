@@ -19,8 +19,6 @@ public class Asana extends SherlockFragmentActivity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
 		setContentView( R.layout.workspace_list );
 	}
-
 }

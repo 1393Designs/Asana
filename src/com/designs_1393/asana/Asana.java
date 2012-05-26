@@ -5,6 +5,11 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import android.os.Bundle;
 
+/**
+ * Main application activity.
+ * Because the application uses Fragments, this will probably stay fairly
+ * minimal.
+ */
 public class Asana extends SherlockFragmentActivity
 {
 	final String TAG = "Asana";

@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="vertical"
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-	<ListView android:id="@id/android:list"
-			  android:layout_width="match_parent"
-			  android:layout_height="match_parent"
-			  android:layout_weight="1"
-			  android:drawSelectorOnTop="false"/>
-
-	<TextView android:id="@id/android:empty"
-			  android:layout_width="match_parent"
-			  android:layout_height="match_parent"
-			  android:text="@string/no_workspaces"/>
+	<fragment android:name="com.designs_1393.asana.WorkspacesFragment"
+		android:id="@+id/workspaces"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
 </LinearLayout>
 

@@ -50,7 +50,9 @@ public class WorkspacesFragment extends SherlockListFragment
 		aFacade.retreiveWorkspaces();
 
 		// get shared preferences containing API key
-		sharedPrefs = getActivity().getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
+		sharedPrefs = getActivity().getSharedPreferences(
+			"AsanaPrefs",
+			Context.MODE_PRIVATE);
 
 		// set layout content from the cache database
 		dbAdapter = new DatabaseAdapter( ctx );

@@ -1,4 +1,4 @@
-package com.designs_1393.asana;
+package com.designs_1393.asana.workspace;
 
 import android.widget.SimpleCursorAdapter;
 import android.content.Context;

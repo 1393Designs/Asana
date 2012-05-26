@@ -1,4 +1,4 @@
-package com.designs_1393.asana;
+package com.designs_1393.asana.workspace;
 
 // General
 import android.os.Bundle;

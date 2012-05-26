@@ -30,7 +30,7 @@ import android.util.Log;
 
 import java.net.URLEncoder;
 
-public class AsanaHelper
+public class AsanaAPI
 {
 	private UsernamePasswordCredentials creds;
 	private DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -39,7 +39,7 @@ public class AsanaHelper
 	private final Uri API_BASE = Uri.parse( "https://app.asana.com/api/1.0" );
 	private final String TAG = "AsanaHelper";
 
-	public AsanaHelper( String APIkey )
+	public AsanaAPI( String APIkey )
 	{
 		creds = new UsernamePasswordCredentials(APIkey, "");
 	}

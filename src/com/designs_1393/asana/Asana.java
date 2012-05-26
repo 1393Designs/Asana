@@ -1,44 +1,9 @@
 package com.designs_1393.asana;
 
-import android.os.Bundle;
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.LayoutInflater;
-import android.widget.FrameLayout;
-
-import android.database.Cursor;
-
-// Dialogs
-import android.app.Dialog;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.text.util.Linkify;
-//import android.view.View.OnClickListener;
-
-// Widgets
-import android.widget.TextView;
-import android.widget.EditText;
-import android.widget.Button;
-import android.widget.ListView;
-
-// Shared preferences
-import android.content.SharedPreferences;
-
 // ActionBarSherlock
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
 
-// Jackson JSON
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.annotation.*;
-
-// Logging
-import android.util.Log;
+import android.os.Bundle;
 
 public class Asana extends SherlockFragmentActivity
 {

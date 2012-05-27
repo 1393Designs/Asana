@@ -32,7 +32,7 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 
 public class ApiKeyDialogFragment extends SherlockDialogFragment
 {
-	private final String APP_TAG = "ApiKeyDialogFragment";
+	private final String APP_TAG = "Asana.ApiKeyDialogFragment";
 	private static SharedPreferences sharedPrefs;
 
 	public static ApiKeyDialogFragment newInstance( SharedPreferences prefs )
@@ -48,39 +48,32 @@ public class ApiKeyDialogFragment extends SherlockDialogFragment
 	                          ViewGroup      container,
 	                          Bundle         savedInstanceState )
 	{
+		Log.i( APP_TAG, "in onCreateView" );
 		View v = inflater.inflate(R.layout.apikeydialog, container );
 		TextView tv = (TextView) v.findViewById( R.id.apiKeyInstructions );
 
 		// apply links
 		Linkify.addLinks( tv, Linkify.WEB_URLS );
 
+		if( v == null )
+			Log.e( APP_TAG, "OH JEEZ v IS NULL" );
+
+		Log.i( APP_TAG, "leaving onCreateView" );
 		return v;
 	}
 
 	@Override
 	public Dialog onCreateDialog( Bundle savedInstanceState )
 	{
-		View layout = getView();
-		final EditText apiKeyInput =
-			(EditText) layout.findViewById( R.id.apiKeyEntry );
+		Log.i( APP_TAG, "in onCreateDialog()" );
 
 		return new AlertDialog.Builder( getActivity() )
 			.setTitle( "API Key" )
-			.setView( layout )
 			.setCancelable( true )
 			.setPositiveButton( "Okay", new DialogInterface.OnClickListener() {
 					public void onClick( DialogInterface dialog, int which )
 					{
-						SharedPreferences.Editor editor =
-							ApiKeyDialogFragment.sharedPrefs.edit();
-						if( editor == null )
-						{
-							Log.i(APP_TAG, "Editor is null");
-						}
-						editor.putString(
-							"api key",
-							apiKeyInput.getText().toString());
-						editor.commit();
+						((Asana)getActivity()).doApiPositiveClick();
 					}
 				})
 			.setNegativeButton( "Cancel", new DialogInterface.OnClickListener() {

@@ -69,4 +69,15 @@ public class AsanaFacade
 			dbAdapter.close();
 		}
 	}
+
+	/**
+	 * Gets a list of projects in the workspace with ID workspaceID from the
+	 * Asana servers, and stores them in the cache database.
+	 * @param workspaceID  Asana-assigned ID for the workspace in question.
+	 */
+	public void retreiveProjects( long workspaceID )
+	{
+		dbAdapter.open();
+		dbAdapter.close();
+	}
 }

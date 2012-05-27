@@ -4,7 +4,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-	<fragment android:name="com.designs_1393.asana.WorkspacesFragment"
+	<fragment android:name="com.designs_1393.asana.workspace.WorkspacesFragment"
 		android:id="@+id/workspaces"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />

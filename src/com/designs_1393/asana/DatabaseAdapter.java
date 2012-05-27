@@ -6,6 +6,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.lang.Long;
+
 // SQL stuff
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,6 +21,17 @@ public class DatabaseAdapter
 	public static final String WORKSPACES_COL_ASANA_ID  = "workspace_id";
 	public static final String WORKSPACES_COL_NAME      = "workspace_name";
 
+	public static final String PROJECTS_TABLE_NAME      = "projects";
+	public static final String PROJECTS_COL_ID          = "_id";
+	public static final String PROJECTS_COL_ASANA_ID    = "project_id";
+	public static final String PROJECTS_COL_ARCHIVED    = "archived";
+	public static final String PROJECTS_COL_CREATED_AT  = "created_at";
+	public static final String PROJECTS_COL_FOLLOWERS   = "followers";
+	public static final String PROJECTS_COL_MODIFIED_AT = "modified_at";
+	public static final String PROJECTS_COL_NAME        = "project_name";
+	public static final String PROJECTS_COL_NOTES       = "project_notes";
+	public static final String PROJECTS_COL_WORKSPACE   = "followers";
+
 	public static final String DATABASE_NAME           = "asana_data";
 	public static final int    DATABASE_VERSION        = 1;
 
@@ -29,6 +42,18 @@ public class DatabaseAdapter
 		+WORKSPACES_COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
 		+WORKSPACES_COL_ASANA_ID +" INTEGER NOT NULL, "
 		+WORKSPACES_COL_NAME +" TEXT NOT NULL);";
+
+	private static final String PROJECTS_TABLE_CREATE =
+		"CREATE TABLE " +WORKSPACES_TABLE_NAME +" ("
+		+PROJECTS_COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+		+PROJECTS_COL_ASANA_ID    + "INTEGER NOT NULL, "
+		+PROJECTS_COL_ARCHIVED    +" INTEGER NOT NULL, "
+		+PROJECTS_COL_CREATED_AT  +" TEXT NOT NULL, "
+		+PROJECTS_COL_FOLLOWERS   +" TEXT NOT NULL, "
+		+PROJECTS_COL_MODIFIED_AT +" TEXT NOT NULL, "
+		+PROJECTS_COL_NAME        +" TEXT NOT NULL, "
+		+PROJECTS_COL_NOTES       +" TEXT NOT NULL, "
+		+PROJECTS_COL_WORKSPACE   +" INTEGER NOT NULL);";
 
 
 	/* Class Member Objects */
@@ -152,5 +177,32 @@ public class DatabaseAdapter
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns a cursor containing all elements of the "projects" table, from a
+	 * specific workspace, sorted either alphabetically or in the order they're
+	 * list in on the website.
+	 * @param archived            Whether to return archived projects or not.
+	 * @param sortAlphabetically  Whether to return the projects in
+	 *                            alphabetical order or not.
+	 * @return                    Cursor containing the row ID, and name for
+	 *                            all projects in the workspace that qualify.
+	 */
+	public Cursor getProjects( long workspaceID, boolean sortAlphabetically )
+	{
+		String sorter = PROJECTS_COL_ID;
+		if( sortAlphabetically )
+			sorter = PROJECTS_COL_NAME;
+
+		String[] from = new String[]
+			{ PROJECTS_COL_ASANA_ID,
+			  PROJECTS_COL_ID,
+			  PROJECTS_COL_NAME };
+		String where       = PROJECTS_COL_WORKSPACE +"=?";
+		String[] whereArgs = new String[]{ Long.toString( workspaceID ) };
+
+		return DB.query( PROJECTS_TABLE_NAME,
+			from, where, whereArgs, null, null, sorter );
 	}
 }

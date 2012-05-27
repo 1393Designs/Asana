@@ -14,10 +14,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseAdapter
 {
 	/* Database Attribute Declarations */
-	public static final String WORKSPACES_TABLE_NAME   = "workspaces";
-	public static final String WORKSPACES_KEY_ID       = "_id";
-	public static final String WORKSPACES_KEY_ASANA_ID = "workspace_id";
-	public static final String WORKSPACES_KEY_NAME     = "workspace_name";
+	public static final String WORKSPACES_TABLE_NAME    = "workspaces";
+	public static final String WORKSPACES_COL_ID        = "_id";
+	public static final String WORKSPACES_COL_ASANA_ID  = "workspace_id";
+	public static final String WORKSPACES_COL_NAME      = "workspace_name";
 
 	public static final String DATABASE_NAME           = "asana_data";
 	public static final int    DATABASE_VERSION        = 1;
@@ -26,9 +26,9 @@ public class DatabaseAdapter
 	/* Table CREATE Commands */
 	private static final String WORKSPACES_TABLE_CREATE =
 		"CREATE TABLE " +WORKSPACES_TABLE_NAME +" ("
-		+WORKSPACES_KEY_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
-		+WORKSPACES_KEY_ASANA_ID +" INTEGER NOT NULL, "
-		+WORKSPACES_KEY_NAME +" TEXT NOT NULL);";
+		+WORKSPACES_COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+		+WORKSPACES_COL_ASANA_ID +" INTEGER NOT NULL, "
+		+WORKSPACES_COL_NAME +" TEXT NOT NULL);";
 
 
 	/* Class Member Objects */
@@ -107,14 +107,14 @@ public class DatabaseAdapter
 	 */
 	public Cursor getWorkspaces( boolean sortAlphabetically )
 	{
-		String sorter = WORKSPACES_KEY_ASANA_ID;
+		String sorter = WORKSPACES_COL_ASANA_ID;
 		if( sortAlphabetically )
-			sorter = WORKSPACES_KEY_NAME;
+			sorter = WORKSPACES_COL_NAME;
 
 		return DB.query( WORKSPACES_TABLE_NAME,
-			new String[] {WORKSPACES_KEY_ID,
-				WORKSPACES_KEY_ASANA_ID,
-				WORKSPACES_KEY_NAME},
+			new String[] {WORKSPACES_COL_ID,
+				WORKSPACES_COL_ASANA_ID,
+				WORKSPACES_COL_NAME},
 			null, null, null, null, sorter );
 	}
 
@@ -143,8 +143,8 @@ public class DatabaseAdapter
 		{
 			values = new ContentValues();
 
-			values.put( WORKSPACES_KEY_ASANA_ID, workspaceArray[i].getID()   );
-			values.put( WORKSPACES_KEY_NAME,     workspaceArray[i].getName() );
+			values.put( WORKSPACES_COL_ASANA_ID, workspaceArray[i].getID()   );
+			values.put( WORKSPACES_COL_NAME,     workspaceArray[i].getName() );
 
 			insertResult = DB.insert( WORKSPACES_TABLE_NAME, null, values );
 			if( insertResult == -1 )

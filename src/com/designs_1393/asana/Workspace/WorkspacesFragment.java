@@ -75,7 +75,7 @@ public class WorkspacesFragment extends SherlockListFragment
 		String workspaceName =
 			tempCursor.getString(
 				tempCursor.getColumnIndexOrThrow(
-					DatabaseAdapter.WORKSPACES_KEY_NAME
+					DatabaseAdapter.WORKSPACES_COL_NAME
 				)
 			);
 

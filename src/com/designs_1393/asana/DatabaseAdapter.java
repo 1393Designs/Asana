@@ -1,6 +1,7 @@
 package com.designs_1393.asana;
 
 import com.designs_1393.asana.workspace.*;
+import com.designs_1393.asana.project.*;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -245,7 +246,7 @@ public class DatabaseAdapter
 			values = new ContentValues();
 
 			values.put( PROJECTS_COL_ASANA_ID,    p.getID() );
-			values.put( PROJECTS_COL_ARCHIVED,    p.getArchived() ? 1 : 0 );
+			values.put( PROJECTS_COL_ARCHIVED,    p.isArchived() ? 1 : 0 );
 			values.put( PROJECTS_COL_CREATED_AT,  p.getCreatedAt() );
 			//values.put( PROJECTS_COL_FOLLOWERS,   userIDs );
 			values.put( PROJECTS_COL_MODIFIED_AT, p.getModifiedAt() );

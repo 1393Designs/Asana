@@ -91,6 +91,7 @@ public class DatabaseAdapter
 		public void onCreate( SQLiteDatabase db )
 		{
 			db.execSQL( WORKSPACES_TABLE_CREATE );
+			db.execSQL( PROJECTS_TABLE_CREATE );
 		}
 
 		@Override

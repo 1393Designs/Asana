@@ -2,11 +2,15 @@ package com.designs_1393.asana.workspace;
 
 // Asana classes
 import com.designs_1393.asana.*;
+import com.designs_1393.asana.project.*;
 
 // General
 import android.os.Bundle;
 import android.content.Context;
 import android.view.View;
+
+// Fragments
+import android.support.v4.app.FragmentTransaction;
 
 // Shared preferences
 import android.content.SharedPreferences;
@@ -79,6 +83,19 @@ public class WorkspacesFragment extends SherlockListFragment
 				)
 			);
 
+		long workspaceID =
+			tempCursor.getLong(
+				tempCursor.getColumnIndexOrThrow(
+					DatabaseAdapter.WORKSPACES_COL_NAME
+				)
+			);
+
 		Log.i( APP_TAG, workspaceName +" pressed!" );
+
+		ProjectsFragment pf = ProjectsFragment.newInstance( workspaceID );
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.remove( this );
+		ft.add( pf, "projects" );
+		ft.commit();
 	}
 }

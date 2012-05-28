@@ -146,7 +146,7 @@ public class DatabaseAdapter
 
 	/** Sets the "workspaces" table to the data in the WorkspaceSet.
 	 *  This should be used primarily to inject the WorkspaceSet parsed from
-	 *  {@link AsanaHelper.getWorkspaces()}.  Note that this method deletes the
+	 *  {@link AsanaAPI.getWorkspaces()}.  Note that this method deletes the
 	 *  entire contents of the "workspaces" table first, and then replaces them
 	 *  with the data in "workspaces".
 	 *  @param workspaces  WorkspaceSet parsed from Asana's list of workspaces.

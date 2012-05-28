@@ -206,4 +206,54 @@ public class DatabaseAdapter
 		return DB.query( PROJECTS_TABLE_NAME,
 			from, where, whereArgs, null, null, sorter );
 	}
+
+	/**
+	 * Sets the "projects" table to the data in the ProjectSet.
+	 * This should be used primarily to inject the ProjectSet parsed from
+	 * {@link AsanaAPI.getProjects( long workspaceID )}.  Note that this method
+	 * deletes the entire contents of the "projects" table first, and then
+	 * replaces them with the data in "projects".
+	 * @param projects  ProjectSet parsed from Asana's list of projects for a
+	 *                  specific workspace.
+	 * @return          true if the operation was successful, false otherwise.
+	 */
+	public boolean setProjects( ProjectSet projects )
+	{
+		// TODO: Handle rollback if "insert" fails?  Maybe this is possible
+		// with some a conflict clause?  delete contents
+		DB.delete( WORKSPACES_TABLE_NAME, null, null );
+
+		ContentValues values;
+
+		// Get array of projects from ProjectSet
+		Project[] projectArray = projects.getData();
+
+		long insertResult = 0;
+
+		for( Project p : projectArray )
+		{
+			//User[] followers = p.getFollowers.getData();
+			//String userIDs = "";
+			//for( User u : followers )
+			//	userIDs += u.getID();
+
+			// build transaction values
+			values = new ContentValues();
+
+			values.put( PROJECTS_COL_ASANA_ID,    p.getID() );
+			values.put( PROJECTS_COL_ARCHIVED,    p.getArchived() ? 1 : 0 );
+			values.put( PROJECTS_COL_CREATED_AT,  p.getCreatedAt() );
+			//values.put( PROJECTS_COL_FOLLOWERS,   userIDs );
+			values.put( PROJECTS_COL_MODIFIED_AT, p.getModifiedAt() );
+			values.put( PROJECTS_COL_NAME,        p.getName() );
+			values.put( PROJECTS_COL_NOTES,       p.getNotes() );
+			values.put( PROJECTS_COL_WORKSPACE,   p.getWorkspace().getID() );
+
+			insertResult = DB.insert( PROJECTS_TABLE_NAME, null, values );
+			if( insertResult == -1 )
+				return false;
+		}
+
+		return true;
+	}
 }

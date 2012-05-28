@@ -154,7 +154,9 @@ public class DatabaseAdapter
 	 */
 	public boolean setWorkspaces( WorkspaceSet workspaces )
 	{
-		// TODO: Handle rollback if "insert" fails?  Maybe this is possible with some a conflict clause?
+		// TODO: Handle rollback if "insert" fails?  Maybe this is possible
+		// with some a conflict clause?
+
 		// delete contents
 		DB.delete( WORKSPACES_TABLE_NAME, null, null );
 
@@ -220,7 +222,9 @@ public class DatabaseAdapter
 	public boolean setProjects( ProjectSet projects )
 	{
 		// TODO: Handle rollback if "insert" fails?  Maybe this is possible
-		// with some a conflict clause?  delete contents
+		// with some a conflict clause?
+
+		// delete contents
 		DB.delete( WORKSPACES_TABLE_NAME, null, null );
 
 		ContentValues values;

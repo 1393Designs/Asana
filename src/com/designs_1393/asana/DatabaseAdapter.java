@@ -30,7 +30,7 @@ public class DatabaseAdapter
 	public static final String PROJECTS_COL_MODIFIED_AT = "modified_at";
 	public static final String PROJECTS_COL_NAME        = "project_name";
 	public static final String PROJECTS_COL_NOTES       = "project_notes";
-	public static final String PROJECTS_COL_WORKSPACE   = "followers";
+	public static final String PROJECTS_COL_WORKSPACE   = "workspace_id";
 
 	public static final String DATABASE_NAME           = "asana_data";
 	public static final int    DATABASE_VERSION        = 1;

@@ -4,8 +4,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-	<fragment android:name="com.designs_1393.asana.ProjectsFragment"
-		android:id="@+id/workspaces"
+	<fragment android:name="com.designs_1393.asana.project.ProjectsFragment"
+		android:id="@+id/projects"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />
 </LinearLayout>

@@ -4,3 +4,5 @@ local.properties
 proguard-project.txt
 .*.sw[op]
 presskit/
+apidoc.htm
+apidoc_files/

@@ -230,7 +230,7 @@ public class DatabaseAdapter
 		// with some a conflict clause?
 
 		// delete contents
-		DB.delete( WORKSPACES_TABLE_NAME, null, null );
+		DB.delete( PROJECTS_TABLE_NAME, null, null );
 
 		ContentValues values;
 

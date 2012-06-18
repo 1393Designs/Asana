@@ -253,6 +253,7 @@ public class DatabaseAdapter
 			values.put( PROJECTS_COL_ARCHIVED,    p.isArchived() ? 1 : 0 );
 			values.put( PROJECTS_COL_CREATED_AT,  p.getCreatedAt() );
 			//values.put( PROJECTS_COL_FOLLOWERS,   userIDs );
+			values.put( PROJECTS_COL_FOLLOWERS, "none" );
 			values.put( PROJECTS_COL_MODIFIED_AT, p.getModifiedAt() );
 			values.put( PROJECTS_COL_NAME,        p.getName() );
 			values.put( PROJECTS_COL_NOTES,       p.getNotes() );

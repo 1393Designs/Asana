@@ -4,9 +4,17 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-	<fragment android:name="com.designs_1393.asana.workspace.WorkspacesFragment"
-		android:id="@+id/workspaces"
+	<ExpandableListView
+		android:id="@id/android:list"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:layout_height="match_parent"
+		android:layout_weight="1"
+		android:drawSelectorOnTop="false"/>
+
+	<TextView
+		android:id="@id/android:empty"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:text="No workspaces" />
 </LinearLayout>
 

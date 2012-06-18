@@ -9,6 +9,8 @@ import android.database.Cursor;
 
 import java.lang.Long;
 
+import android.util.Log;
+
 // SQL stuff
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -205,6 +207,8 @@ public class DatabaseAdapter
 			  PROJECTS_COL_NAME,
 			  PROJECTS_COL_WORKSPACE };
 		String selection       = PROJECTS_COL_WORKSPACE +" = " +workspaceID;
+		Log.i( TAG, "id = " +workspaceID );
+		Log.i( TAG, "id as string = " +String.valueOf(workspaceID) );
 
 		return DB.query( PROJECTS_TABLE_NAME,
 			cols, selection, null, null, null, sorter );

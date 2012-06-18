@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.content.Context;
 import android.view.View;
 
+import android.widget.ListAdapter;
+
 // Shared preferences
 import android.content.SharedPreferences;
 
@@ -62,7 +64,7 @@ public class WorkspacesFragment extends SherlockListFragment
 		dbAdapter.open();
 
 		workspaceCursor = dbAdapter.getWorkspaces( true );
-		setListAdapter( new WorkspaceAdapter( ctx, workspaceCursor ) );
+		setListAdapter( (ListAdapter)(new ExpandableWorkspaceAdapter( ctx, workspaceCursor )) );
 		dbAdapter.close();
 	}
 

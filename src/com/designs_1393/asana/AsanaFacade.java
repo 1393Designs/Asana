@@ -3,6 +3,7 @@ package com.designs_1393.asana;
 // Workspace classes
 import com.designs_1393.asana.workspace.Workspace;
 import com.designs_1393.asana.workspace.WorkspaceSet;
+import com.designs_1393.asana.project.ProjectSet;
 
 // Android classes
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.content.SharedPreferences;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.annotation.*;
+
+import android.util.Log;
 
 /**
  * Facade pattern around AsanaAPI to automate the process of storing things in
@@ -23,6 +26,8 @@ public class AsanaFacade
 	private AsanaAPI ah;
 	private Context context;
 	private DatabaseAdapter dbAdapter;
+
+	private final String APP_TAG = "Asana.AsanaFacade";
 
 	/**
 	 * Creates a new AsanaFacade.
@@ -61,6 +66,35 @@ public class AsanaFacade
 
 			// write the WorkspaceSet to the cache database
 			dbAdapter.setWorkspaces( workspaces );
+		}
+		catch(Exception e)
+		{ e.printStackTrace(); }
+		finally
+		{
+			dbAdapter.close();
+		}
+	}
+
+	/**
+	 * Gets a list of all projects stored on Asana
+	 */
+	public void retreiveProjects()
+	{
+		dbAdapter.open();
+
+		String projectsJSON = ah.getAllProjects();
+		Log.i( APP_TAG, projectsJSON );
+
+		ObjectMapper mapper = new ObjectMapper();
+		try
+		{
+			// map the received JSON to a ProjectSet
+			ProjectSet projects = mapper.readValue(
+				projectsJSON,
+				ProjectSet.class );
+
+			// write the ProjectSet to the cache database
+			dbAdapter.setProjects( projects );
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }

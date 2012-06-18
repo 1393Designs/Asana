@@ -199,15 +199,15 @@ public class DatabaseAdapter
 		if( sortAlphabetically )
 			sorter = PROJECTS_COL_NAME;
 
-		String[] from = new String[]
+		String[] cols = new String[]
 			{ PROJECTS_COL_ASANA_ID,
 			  PROJECTS_COL_ID,
-			  PROJECTS_COL_NAME };
-		String where       = PROJECTS_COL_WORKSPACE +"=?";
-		String[] whereArgs = new String[]{ Long.toString( workspaceID ) };
+			  PROJECTS_COL_NAME,
+			  PROJECTS_COL_WORKSPACE };
+		String selection       = PROJECTS_COL_WORKSPACE +" = " +workspaceID;
 
 		return DB.query( PROJECTS_TABLE_NAME,
-			from, where, whereArgs, null, null, sorter );
+			cols, selection, null, null, null, sorter );
 	}
 
 	/**

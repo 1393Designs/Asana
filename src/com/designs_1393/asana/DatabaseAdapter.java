@@ -259,10 +259,13 @@ public class DatabaseAdapter
 			values.put( PROJECTS_COL_NOTES,       p.getNotes() );
 			values.put( PROJECTS_COL_WORKSPACE,   p.getWorkspace().getID() );
 
+			Log.i(TAG, "ID = " +p.getWorkspace().getID() );
+
 			insertResult = DB.insert( PROJECTS_TABLE_NAME, null, values );
 			if( insertResult == -1 )
 				return false;
 		}
+
 
 		return true;
 	}

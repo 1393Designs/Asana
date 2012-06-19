@@ -13,7 +13,7 @@ public class Project
 	private String    modifiedAt; // TODO: this should be parsed to a real time
 	private String    name;
 	private String    notes;
-	private Workspace workspace;
+	private long      workspaceID;
 
 	/**
 	 * Default constructor.
@@ -30,13 +30,13 @@ public class Project
 	 */
 	public Project()
 	{
-		archived   = false;
-		createdAt  = "";
+		archived    = false;
+		createdAt   = "";
 		// followers = new UserSet();
-		modifiedAt = "";
-		name       = "";
-		notes      = "";
-		workspace  = new Workspace();
+		modifiedAt  = "";
+		name        = "";
+		notes       = "";
+		workspaceID = 0;
 	}
 
 	/**
@@ -179,24 +179,22 @@ public class Project
 	}
 
 	/**
-	 * Returns the workspace this project is associated with.
-	 * @return a Workspace object containing the ID and name of the workspace
-	 *         this project is associated with.
+	 * Returns the workspace ID this project is associated with.
+	 * @return the workspace ID this project is associated with
 	 */
-	public Workspace getWorkspace()
+	public long getWorkspaceID()
 	{
-		return workspace;
+		return workspaceID;
 	}
 
 	/**
-	 * Sets the workspace this project is associated with.
+	 * Sets the workspace ID this project is associated with.
 	 * Note that once created, projects cannot be moved to a different
 	 * workspace.
-	 * @param ws  a Workspace object containing the ID and name of the
-	 *            workspace this project is associated with.
+	 * @param wsID the ID of the workspace this project is associated with
 	 */
-	public void setWorkspace( Workspace ws )
+	public void setWorkspaceID( long wsID )
 	{
-		workspace = ws;
+		workspaceID = wsID;
 	}
 }

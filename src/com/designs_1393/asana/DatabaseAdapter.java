@@ -60,7 +60,7 @@ public class DatabaseAdapter
 
 
 	/* Class Member Objects */
-	private static final String TAG = "Asana: DatabaseAdapter";
+	private static final String APP_TAG = "Asana: DatabaseAdapter";
 
 	private DatabaseHelper DBhelper;
 	private SQLiteDatabase DB;
@@ -207,9 +207,8 @@ public class DatabaseAdapter
 			  PROJECTS_COL_NAME,
 			  PROJECTS_COL_WORKSPACE };
 		String selection       = PROJECTS_COL_WORKSPACE +" = " +workspaceID;
-		Log.i( TAG, "id = " +workspaceID );
-		Log.i( TAG, "id as string = " +String.valueOf(workspaceID) );
-
+		Log.i( APP_TAG, "id = " +workspaceID );
+		Log.i( APP_TAG, "id as string = " +String.valueOf(workspaceID) );
 		return DB.query( PROJECTS_TABLE_NAME,
 			cols, selection, null, null, null, sorter );
 	}

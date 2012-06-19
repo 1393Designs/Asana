@@ -202,8 +202,8 @@ public class DatabaseAdapter
 			sorter = PROJECTS_COL_NAME;
 
 		String[] cols = new String[]
-			{ PROJECTS_COL_ASANA_ID,
-			  PROJECTS_COL_ID,
+			{ PROJECTS_COL_ID,
+			  PROJECTS_COL_ASANA_ID,
 			  PROJECTS_COL_NAME,
 			  PROJECTS_COL_WORKSPACE };
 		String selection       = PROJECTS_COL_WORKSPACE +" = " +workspaceID;

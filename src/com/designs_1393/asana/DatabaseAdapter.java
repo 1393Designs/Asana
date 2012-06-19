@@ -223,13 +223,10 @@ public class DatabaseAdapter
 	 *                  specific workspace.
 	 * @return          true if the operation was successful, false otherwise.
 	 */
-	public boolean setProjects( ProjectSet projects )
+	public boolean addProjects( ProjectSet projects )
 	{
 		// TODO: Handle rollback if "insert" fails?  Maybe this is possible
 		// with some a conflict clause?
-
-		// delete contents
-		DB.delete( PROJECTS_TABLE_NAME, null, null );
 
 		ContentValues values;
 
@@ -240,29 +237,42 @@ public class DatabaseAdapter
 
 		for( Project p : projectArray )
 		{
-			//User[] followers = p.getFollowers.getData();
-			//String userIDs = "";
-			//for( User u : followers )
-			//	userIDs += u.getID();
+			Cursor c = DB.query( PROJECTS_TABLE_NAME,
+			                     new String[] {PROJECTS_COL_WORKSPACE},
+			                     PROJECTS_COL_WORKSPACE +"=? AND "
+			                         +PROJECTS_COL_NAME +"=?",
+			                     new String[]
+			                         { String.valueOf(p.getWorkspaceID()),
+			                          p.getName() },
+			                     null, null, PROJECTS_COL_WORKSPACE );
+			if( c.getCount() == 0 )
+			{
 
-			// build transaction values
-			values = new ContentValues();
+				//String userIDs = "";
+				//for( User u : followers )
+				//	userIDs += u.getID();
 
-			values.put( PROJECTS_COL_ASANA_ID,    p.getID() );
-			values.put( PROJECTS_COL_ARCHIVED,    p.isArchived() ? 1 : 0 );
-			values.put( PROJECTS_COL_CREATED_AT,  p.getCreatedAt() );
-			//values.put( PROJECTS_COL_FOLLOWERS,   userIDs );
-			values.put( PROJECTS_COL_FOLLOWERS, "none" );
-			values.put( PROJECTS_COL_MODIFIED_AT, p.getModifiedAt() );
-			values.put( PROJECTS_COL_NAME,        p.getName() );
-			values.put( PROJECTS_COL_NOTES,       p.getNotes() );
-			values.put( PROJECTS_COL_WORKSPACE,   p.getWorkspace().getID() );
+				// build transaction values
+				values = new ContentValues();
 
-			Log.i(TAG, "ID = " +p.getWorkspace().getID() );
+				values.put( PROJECTS_COL_ASANA_ID,    p.getID() );
+				values.put( PROJECTS_COL_ARCHIVED,    p.isArchived() ? 1 : 0 );
+				values.put( PROJECTS_COL_CREATED_AT,  "created at" );
+				//values.put( PROJECTS_COL_FOLLOWERS,   userIDs );
+				values.put( PROJECTS_COL_FOLLOWERS, "none" );
+				values.put( PROJECTS_COL_MODIFIED_AT, "modified at" );
+				values.put( PROJECTS_COL_NAME,        p.getName() );
+				//values.put( PROJECTS_COL_NOTES,       p.getNotes() );
+				values.put( PROJECTS_COL_NOTES,       "NOTES" );
+				values.put( PROJECTS_COL_WORKSPACE,   p.getWorkspaceID() );
 
-			insertResult = DB.insert( PROJECTS_TABLE_NAME, null, values );
-			if( insertResult == -1 )
-				return false;
+				Log.i(APP_TAG, "ID = " +p.getWorkspaceID() );
+
+				insertResult = DB.insert( PROJECTS_TABLE_NAME, null, values );
+				if( insertResult == -1 )
+					return false;
+			}
+			c.close();
 		}
 
 

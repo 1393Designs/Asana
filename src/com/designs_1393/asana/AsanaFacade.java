@@ -3,11 +3,15 @@ package com.designs_1393.asana;
 // Workspace classes
 import com.designs_1393.asana.workspace.Workspace;
 import com.designs_1393.asana.workspace.WorkspaceSet;
+import com.designs_1393.asana.project.Project;
 import com.designs_1393.asana.project.ProjectSet;
 
 // Android classes
 import android.content.Context;
 import android.content.SharedPreferences;
+
+// Database
+import android.database.Cursor;
 
 // Jackson JSON
 import com.fasterxml.jackson.core.*;
@@ -76,32 +80,29 @@ public class AsanaFacade
 	}
 
 	/**
-	 * Gets a list of all projects stored on Asana
+	 * Gets a list of all projects stored on Asana and store them in the cache
+	 * database.
 	 */
 	public void retreiveProjects()
 	{
 		dbAdapter.open();
 
-		String projectsJSON = ah.getAllProjects();
-		Log.i( APP_TAG, projectsJSON );
+		Cursor c = dbAdapter.getWorkspaces( true );
 
-		ObjectMapper mapper = new ObjectMapper();
-		try
+		c.moveToFirst();
+		for( int i = 0; i < c.getCount(); i++ )
 		{
-			// map the received JSON to a ProjectSet
-			ProjectSet projects = mapper.readValue(
-				projectsJSON,
-				ProjectSet.class );
+			long workspaceID = c.getLong(
+			                       c.getColumnIndex(
+			                           DatabaseAdapter.WORKSPACES_COL_ASANA_ID
+			                       )
+			                   );
 
-			// write the ProjectSet to the cache database
-			dbAdapter.setProjects( projects );
+			retreiveProjects( workspaceID );
+			c.moveToNext();
 		}
-		catch(Exception e)
-		{ e.printStackTrace(); }
-		finally
-		{
-			dbAdapter.close();
-		}
+
+		dbAdapter.close();
 	}
 
 	/**
@@ -112,6 +113,33 @@ public class AsanaFacade
 	public void retreiveProjects( long workspaceID )
 	{
 		dbAdapter.open();
-		dbAdapter.close();
+
+		String projectsJSON = ah.getProjectsInWorkspace( workspaceID );
+
+		Log.i( APP_TAG, "Retreiving for workspace: " +workspaceID );
+		Log.i( APP_TAG, "JSON: " +projectsJSON );
+
+		ObjectMapper mapper = new ObjectMapper();
+		try
+		{
+			// map the received JSON to a ProjectSet
+			ProjectSet projects = mapper.readValue(
+				projectsJSON,
+				ProjectSet.class );
+
+			// manually set the workspace ID.  There MUST be a better way of
+			// doing this.
+			for( Project p : projects.getData() )
+				p.setWorkspaceID( workspaceID );
+
+			// write the ProjectSet to the cache database
+			dbAdapter.addProjects( projects );
+		}
+		catch(Exception e)
+		{ e.printStackTrace(); }
+		finally
+		{
+			dbAdapter.close();
+		}
 	}
 }

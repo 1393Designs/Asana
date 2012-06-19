@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class ExpandableWorkspaceAdapter extends SimpleCursorTreeAdapter
 {
-	private DatabaseAdapter adapter = null;
+	private DatabaseAdapter db = null;
 	private final String APP_TAG = "Asana.ExpandableWorkspaceAdapter";
 
 	private Context ctx;
@@ -38,6 +38,8 @@ public class ExpandableWorkspaceAdapter extends SimpleCursorTreeAdapter
 			new int[] {R.id.projects} );
 
 		ctx = context;
+		db = new DatabaseAdapter(ctx);
+		db.open();
 	}
 
 	/**
@@ -57,8 +59,6 @@ public class ExpandableWorkspaceAdapter extends SimpleCursorTreeAdapter
 
 		Log.i( APP_TAG, "in getChildrenCursor" );
 
-		DatabaseAdapter db = new DatabaseAdapter(ctx);
-		Cursor out = db.getProjects( id, true );
-		return out;
+		return db.getProjects( id, true );
 	}
 }

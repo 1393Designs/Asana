@@ -18,9 +18,30 @@ import android.database.Cursor;
 
 // Widgets
 import android.widget.ListView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 
 // ActionBarSherlock
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
+
+// View
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
+
+// Widgets
+import android.widget.TextView;
+import android.widget.EditText;
+
+// Links
+import android.text.util.Linkify;
+
+// Dialog
+import android.app.Dialog;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 import android.util.Log;
 
@@ -38,23 +59,59 @@ public class Asana extends SherlockExpandableListActivity
 
 	private DatabaseAdapter dbAdapter;
 
+
+	private void showDialog()
+	{
+		View v = getLayoutInflater()
+		         .inflate(R.layout.apikeydialog, null);
+		TextView instructions =
+			(TextView) v.findViewById( R.id.apiKeyInstructions );
+
+		final EditText apiKeyInput =
+			(EditText) v.findViewById( R.id.apiKeyEntry );
+
+		// apply links to instructions
+		Linkify.addLinks( instructions, Linkify.WEB_URLS );
+
+		new AlertDialog.Builder( this )
+			.setView( v )
+			.setTitle( "API Key" )
+			.setCancelable( true )
+			.setPositiveButton( "Okay", new DialogInterface.OnClickListener() {
+					public void onClick( DialogInterface dialog, int which )
+					{
+						SharedPreferences.Editor editor = sharedPrefs.edit();
+						if( editor == null )
+						{
+							Log.i(APP_TAG, "Editor is null");
+						}
+						editor.putString(
+							"api key",
+							apiKeyInput.getText().toString());
+						editor.commit();
+					}
+				})
+			.setNegativeButton( "Cancel", new DialogInterface.OnClickListener() {
+				public void onClick( DialogInterface dialog, int which ){}
+			}).create().show();
+	}
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 
+		// store application context
+		ctx = getApplicationContext();
+
 		sharedPrefs = getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
 
 		if(sharedPrefs.getString( "api key", "not found" ).equals("not found"))
 		{
-			// create and show the dialog
-			//apiKeyDialog = ApiKeyDialogFragment.newInstance(sharedPrefs);
-			//apiKeyDialog.show( getFragmentManager(), "dialog" );
+			showDialog();
 		}
 
-		// store application context
-		ctx = getApplicationContext();
 
 		// get shared preferences containing API key
 		sharedPrefs = getSharedPreferences(
@@ -73,6 +130,7 @@ public class Asana extends SherlockExpandableListActivity
 		workspaceCursor = dbAdapter.getWorkspaces( true );
 		setListAdapter( new ExpandableWorkspaceAdapter( ctx, workspaceCursor ) );
 		dbAdapter.close();
+
 		setContentView( R.layout.workspace_list );
 	}
 

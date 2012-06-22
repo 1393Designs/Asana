@@ -60,7 +60,7 @@ public class DatabaseAdapter
 
 
 	/* Class Member Objects */
-	private static final String APP_TAG = "Asana: DatabaseAdapter";
+	private static final String APP_TAG = "Asana.DatabaseAdapter";
 
 	private DatabaseHelper DBhelper;
 	private SQLiteDatabase DB;

@@ -207,8 +207,6 @@ public class DatabaseAdapter
 			  PROJECTS_COL_NAME,
 			  PROJECTS_COL_WORKSPACE };
 		String selection       = PROJECTS_COL_WORKSPACE +" = " +workspaceID;
-		Log.i( APP_TAG, "id = " +workspaceID );
-		Log.i( APP_TAG, "id as string = " +String.valueOf(workspaceID) );
 		return DB.query( PROJECTS_TABLE_NAME,
 			cols, selection, null, null, null, sorter );
 	}
@@ -265,8 +263,6 @@ public class DatabaseAdapter
 				//values.put( PROJECTS_COL_NOTES,       p.getNotes() );
 				values.put( PROJECTS_COL_NOTES,       "NOTES" );
 				values.put( PROJECTS_COL_WORKSPACE,   p.getWorkspaceID() );
-
-				Log.i(APP_TAG, "ID = " +p.getWorkspaceID() );
 
 				insertResult = DB.insert( PROJECTS_TABLE_NAME, null, values );
 				if( insertResult == -1 )

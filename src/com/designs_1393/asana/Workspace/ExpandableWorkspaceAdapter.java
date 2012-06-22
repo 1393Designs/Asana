@@ -57,8 +57,6 @@ public class ExpandableWorkspaceAdapter extends SimpleCursorTreeAdapter
 			)
 		);
 
-		Log.i( APP_TAG, "in getChildrenCursor" );
-
 		return db.getProjects( id, true );
 	}
 }

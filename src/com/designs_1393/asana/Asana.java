@@ -128,7 +128,7 @@ public class Asana extends SherlockExpandableListActivity
 		dbAdapter.open();
 
 		workspaceCursor = dbAdapter.getWorkspaces( true );
-		setListAdapter( new ExpandableWorkspaceAdapter( ctx, workspaceCursor ) );
+		setListAdapter( new ExpandableWorkspaceAdapter(ctx, workspaceCursor) );
 		dbAdapter.close();
 
 		setContentView( R.layout.workspace_list );

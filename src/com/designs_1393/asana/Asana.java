@@ -134,7 +134,7 @@ public class Asana extends SherlockActivity
 
 		setContentView( R.layout.workspace_list );
 
-		final ExpandableListView elv = (ExpandableListView)findViewById(android.R.id.list);
+		final ExpandableListView elv = (ExpandableListView)findViewById(R.id.workspace_list);
 		workspaceList = elv;
 		workspaceAdapter = new ExpandableWorkspaceAdapter(ctx, workspaceCursor); // setAdapter
 		elv.setAdapter( workspaceAdapter );
@@ -186,8 +186,8 @@ public class Asana extends SherlockActivity
 	@Override
 	public void onContentChanged() {
 		super.onContentChanged();
-		View emptyView = findViewById(android.R.id.empty);
-		workspaceList = (ExpandableListView)findViewById(android.R.id.list);
+		View emptyView = findViewById(R.id.no_workspaces);
+		workspaceList = (ExpandableListView)findViewById(R.id.workspace_list);
 		if (workspaceList == null) {
 			throw new RuntimeException(
 				"Your content must have a ListView whose id attribute is " +

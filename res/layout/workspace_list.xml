@@ -5,14 +5,14 @@
 		android:layout_height="match_parent">
 
 	<ExpandableListView
-		android:id="@id/android:list"
+		android:id="@+id/workspace_list"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_weight="1"
 		android:drawSelectorOnTop="false"/>
 
 	<TextView
-		android:id="@id/android:empty"
+		android:id="@+id/no_workspaces"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:text="No workspaces" />

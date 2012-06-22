@@ -134,6 +134,38 @@ public class Asana extends SherlockExpandableListActivity
 		setContentView( R.layout.workspace_list );
 	}
 
+
+	@Override
+	public boolean onChildClick( ExpandableListView parent,
+	                             View v,
+	                             int groupPosition,
+	                             int childPosition,
+	                             long id )
+	{
+		Cursor childrenCursor = ((ExpandableWorkspaceAdapter)getExpandableListAdapter())
+		                            .getChildrenCursor( workspaceCursor );
+		childrenCursor.moveToPosition( childPosition );
+
+		long projectID = childrenCursor.getLong(
+		                     childrenCursor.getColumnIndex(
+		                         DatabaseAdapter.PROJECTS_COL_ASANA_ID
+		                     )
+		                 );
+
+		String projectName = childrenCursor.getString(
+		                         childrenCursor.getColumnIndex(
+		                             DatabaseAdapter.PROJECTS_COL_NAME
+		                         )
+		                     );
+
+		Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
+		Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
+
+		// we've handled the click, so return true
+		return true;
+	}
+
+
 	public void onListItemClick( ListView l, View v, int pos, long id )
 	{
 		Cursor tempCursor = workspaceCursor;

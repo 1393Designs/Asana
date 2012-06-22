@@ -22,7 +22,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
 // ActionBarSherlock
-import com.actionbarsherlock.app.SherlockExpandableListActivity;
+import com.actionbarsherlock.app.SherlockActivity;
 
 // View
 import android.view.View;
@@ -48,7 +48,7 @@ import android.util.Log;
 /**
  * Main application activity.
  */
-public class Asana extends SherlockExpandableListActivity
+public class Asana extends SherlockActivity
 {
 	final String APP_TAG = "Asana";
 	private SharedPreferences sharedPrefs;
@@ -56,6 +56,9 @@ public class Asana extends SherlockExpandableListActivity
 
 	private Context ctx;
 	private Cursor workspaceCursor;
+
+	private ExpandableWorkspaceAdapter workspaceAdapter;
+	private ExpandableListView workspaceList;
 
 	private DatabaseAdapter dbAdapter;
 
@@ -128,58 +131,71 @@ public class Asana extends SherlockExpandableListActivity
 		dbAdapter.open();
 
 		workspaceCursor = dbAdapter.getWorkspaces( true );
-		setListAdapter( new ExpandableWorkspaceAdapter(ctx, workspaceCursor) );
-		dbAdapter.close();
 
 		setContentView( R.layout.workspace_list );
+
+		final ExpandableListView elv = (ExpandableListView)findViewById(android.R.id.list);
+		workspaceList = elv;
+		workspaceAdapter = new ExpandableWorkspaceAdapter(ctx, workspaceCursor); // setAdapter
+		elv.setAdapter( workspaceAdapter );
+
+		elv.setOnChildClickListener( new OnChildClickListener() {
+			public boolean onChildClick( ExpandableListView parent,
+										 View v,
+										 int groupPosition,
+										 int childPosition,
+										 long id )
+			{
+				Cursor childrenCursor = ((ExpandableWorkspaceAdapter)elv.getExpandableListAdapter())
+											.getChildrenCursor( workspaceCursor );
+				childrenCursor.moveToPosition( childPosition );
+
+				long projectID = childrenCursor.getLong(
+									 childrenCursor.getColumnIndex(
+										 DatabaseAdapter.PROJECTS_COL_ASANA_ID
+									 )
+								 );
+
+				String projectName = childrenCursor.getString(
+										 childrenCursor.getColumnIndex(
+											 DatabaseAdapter.PROJECTS_COL_NAME
+										 )
+									 );
+
+				childrenCursor.close();
+
+				Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
+				Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
+
+				// we've handled the click, so return true
+				return true;
+			}
+		});
+
+		dbAdapter.close();
+
 	}
 
-
+	/**
+	 * Updates the screen state (current list and other views) when the
+	 * content changes.
+	 * Shamelessly modified from Android's ListActivity
+	 *
+	 * @see Activity#onContentChanged()
+	 */
 	@Override
-	public boolean onChildClick( ExpandableListView parent,
-	                             View v,
-	                             int groupPosition,
-	                             int childPosition,
-	                             long id )
-	{
-		Cursor childrenCursor = ((ExpandableWorkspaceAdapter)getExpandableListAdapter())
-		                            .getChildrenCursor( workspaceCursor );
-		childrenCursor.moveToPosition( childPosition );
-
-		long projectID = childrenCursor.getLong(
-		                     childrenCursor.getColumnIndex(
-		                         DatabaseAdapter.PROJECTS_COL_ASANA_ID
-		                     )
-		                 );
-
-		String projectName = childrenCursor.getString(
-		                         childrenCursor.getColumnIndex(
-		                             DatabaseAdapter.PROJECTS_COL_NAME
-		                         )
-		                     );
-
-		childrenCursor.close();
-
-		Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
-		Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
-
-		// we've handled the click, so return true
-		return true;
-	}
-
-
-	public void onListItemClick( ListView l, View v, int pos, long id )
-	{
-		Cursor tempCursor = workspaceCursor;
-		tempCursor.moveToPosition( pos );
-
-		String workspaceName =
-			tempCursor.getString(
-				tempCursor.getColumnIndexOrThrow(
-					DatabaseAdapter.WORKSPACES_COL_NAME
-				)
-			);
-
-		Log.i( APP_TAG, workspaceName +" pressed!" );
+	public void onContentChanged() {
+		super.onContentChanged();
+		View emptyView = findViewById(android.R.id.empty);
+		workspaceList = (ExpandableListView)findViewById(android.R.id.list);
+		if (workspaceList == null) {
+			throw new RuntimeException(
+				"Your content must have a ListView whose id attribute is " +
+				"'android.R.id.list'");
+		}
+		if (emptyView != null) {
+			workspaceList.setEmptyView(emptyView);
+		}
+		workspaceList.setAdapter(workspaceAdapter);
 	}
 }

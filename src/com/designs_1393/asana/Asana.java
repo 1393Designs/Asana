@@ -158,6 +158,8 @@ public class Asana extends SherlockExpandableListActivity
 		                         )
 		                     );
 
+		childrenCursor.close();
+
 		Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
 		Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
 

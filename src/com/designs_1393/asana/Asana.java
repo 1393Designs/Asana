@@ -122,7 +122,7 @@ public class Asana extends SherlockActivity
 			Context.MODE_PRIVATE);
 
 		// get and store workspaces from Asana
-		AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
+		final AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
 		aFacade.retreiveWorkspaces();
 		aFacade.retreiveProjects();
 
@@ -166,6 +166,8 @@ public class Asana extends SherlockActivity
 
 				Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
 				Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
+
+				aFacade.retreiveTasks( projectID );
 
 				// we've handled the click, so return true
 				return true;

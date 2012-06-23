@@ -2,7 +2,6 @@ package com.designs_1393.asana.task;
 
 // Asana classes
 import com.designs_1393.asana.*;
-import com.designs_1393.project;
 
 public class Task
 {

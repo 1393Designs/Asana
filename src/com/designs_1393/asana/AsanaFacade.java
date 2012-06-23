@@ -142,4 +142,21 @@ public class AsanaFacade
 			dbAdapter.close();
 		}
 	}
+
+	/**
+	 * Gets a list of tasks associated with the project with ID projectID
+	 * from the Asana servers, and stores them in the cache database.
+	 * @param projectID  Asana-assigned ID for the project in question.
+	 */
+	public void retreiveTasks( long projectID )
+	{
+		dbAdapter.open();
+
+		String tasksJSON = ah.getTasks( projectID );
+
+		Log.i( APP_TAG, "Retreiving for project: " +projectID );
+		Log.i( APP_TAG, "JSON: " +tasksJSON );
+
+		dbAdapter.close();
+	}
 }

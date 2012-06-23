@@ -142,4 +142,27 @@ public class AsanaAPI
 
 		return "";
 	}
+
+	public String getTasks( long projectID )
+	{
+		try{
+			Uri.Builder uri = API_BASE.buildUpon();
+			uri.appendPath("projects");
+			uri.appendPath(String.valueOf(projectID));
+			uri.appendPath("tasks");
+
+			if( usePrettyPrint )
+				uri.appendQueryParameter( "opt_pretty", "true" );
+
+			HttpGet httpget = new HttpGet( uri.build().toString() );
+			httpget.addHeader( BasicScheme.authenticate(creds, "US_ASCII", false) );
+
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+
+			String responseBody = httpclient.execute(httpget, responseHandler);
+			return responseBody;
+		} catch( Exception e ){ e.printStackTrace(); }
+
+		return "";
+	}
 }

@@ -35,6 +35,18 @@ public class DatabaseAdapter
 	public static final String PROJECTS_COL_NOTES       = "project_notes";
 	public static final String PROJECTS_COL_WORKSPACE   = "workspace_id";
 
+	public static final String TASKS_TABLE_NAME         = "tasks";
+	public static final String TASKS_COL_ID             = "_id";
+	public static final String TASKS_COL_ASANA_ID       = "task_id";
+	public static final String TASKS_COL_ASSIGNEE       = "assignee";
+	public static final String TASKS_COL_CREATED_AT     = "created_at";
+	public static final String TASKS_COL_COMPLETED      = "completed";
+	public static final String TASKS_COL_MODIFIED_AT    = "modified_at";
+	public static final String TASKS_COL_NAME           = "name";
+	public static final String TASKS_COL_NOTES          = "notes";
+	public static final String TASKS_COL_PROJECT_IDS    = "project_ids";
+	public static final String TASKS_COL_WORKSPACE      = "workspace_id";
+
 	public static final String DATABASE_NAME           = "asana_data";
 	public static final int    DATABASE_VERSION        = 1;
 
@@ -57,6 +69,19 @@ public class DatabaseAdapter
 		+PROJECTS_COL_NAME        +" TEXT NOT NULL, "
 		+PROJECTS_COL_NOTES       +" TEXT NOT NULL, "
 		+PROJECTS_COL_WORKSPACE   +" INTEGER NOT NULL);";
+
+	private static final String TASKS_TABLE_CREATE =
+		"CREATE TABLE " +TASKS_TABLE_NAME +" ("
+		+TASKS_COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+		+TASKS_COL_ASANA_ID       +" INTEGER NOT NULL, "
+		+TASKS_COL_ASSIGNEE       +" INTEGER NOT NULL, "
+		+TASKS_COL_CREATED_AT     +" TEXT NOT NULL, "
+		+TASKS_COL_COMPLETED      +" INTEGER NOT NULL, "
+		+TASKS_COL_MODIFIED_AT    +" TEXT NOT NULL, "
+		+TASKS_COL_NAME           +" TEXT NOT NULL, "
+		+TASKS_COL_NOTES          +" TEXT NOT NULL, "
+		+TASKS_COL_PROJECT_IDS    +" TEXT NOT NULL, "
+		+TASKS_COL_WORKSPACE      +" INTEGER NOT NULL);";
 
 
 	/* Class Member Objects */
@@ -95,6 +120,7 @@ public class DatabaseAdapter
 		{
 			db.execSQL( WORKSPACES_TABLE_CREATE );
 			db.execSQL( PROJECTS_TABLE_CREATE );
+			db.execSQL( TASKS_TABLE_CREATE );
 		}
 
 		@Override

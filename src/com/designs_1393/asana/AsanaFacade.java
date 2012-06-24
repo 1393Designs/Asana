@@ -32,6 +32,7 @@ public class AsanaFacade
 	private AsanaAPI ah;
 	private Context context;
 	private DatabaseAdapter dbAdapter;
+	private ObjectMapper mapper = new ObjectMapper();
 
 	private final String APP_TAG = "Asana.AsanaFacade";
 
@@ -62,7 +63,6 @@ public class AsanaFacade
 
 		String workspacesJSON = ah.getWorkspaces();
 
-		ObjectMapper mapper = new ObjectMapper();
 		try
 		{
 			// map the received JSON to a WorkspaceSet
@@ -121,7 +121,6 @@ public class AsanaFacade
 		Log.i( APP_TAG, "Retreiving for workspace: " +workspaceID );
 		Log.i( APP_TAG, "JSON: " +projectsJSON );
 
-		ObjectMapper mapper = new ObjectMapper();
 		try
 		{
 			// map the received JSON to a ProjectSet
@@ -159,7 +158,6 @@ public class AsanaFacade
 		Log.i( APP_TAG, "Retreiving for project: " +projectID );
 		Log.i( APP_TAG, "JSON: " +tasksJSON );
 
-		ObjectMapper mapper = new ObjectMapper();
 		try
 		{
 			// map the received JSON to a TaskSet

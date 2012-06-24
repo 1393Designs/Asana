@@ -5,6 +5,8 @@ import com.designs_1393.asana.workspace.Workspace;
 import com.designs_1393.asana.workspace.WorkspaceSet;
 import com.designs_1393.asana.project.Project;
 import com.designs_1393.asana.project.ProjectSet;
+import com.designs_1393.asana.task.Task;
+import com.designs_1393.asana.task.TaskSet;
 
 // Android classes
 import android.content.Context;
@@ -157,6 +159,26 @@ public class AsanaFacade
 		Log.i( APP_TAG, "Retreiving for project: " +projectID );
 		Log.i( APP_TAG, "JSON: " +tasksJSON );
 
-		dbAdapter.close();
+		ObjectMapper mapper = new ObjectMapper();
+		try
+		{
+			// map the received JSON to a TaskSet
+			TaskSet tasks = mapper.readValue(
+				tasksJSON,
+				TaskSet.class );
+
+			// manually set the project ID.  There MUST be a better way of
+			// doing this.
+			for( Task t : tasks.getData() )
+				t.setProjects( new long[] {projectID} );
+
+			dbAdapter.addTasks( tasks );
+		}
+		catch(Exception e)
+		{ e.printStackTrace(); }
+		finally
+		{
+			dbAdapter.close();
+		}
 	}
 }

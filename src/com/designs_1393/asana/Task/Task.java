@@ -67,7 +67,7 @@ public class Task
 	}
 
 	/**
-	 * Returns the task's assignees.
+	 * Returns the task's assignee.
 	 * @return the user this task was assigned to.
 	 */
 	public long getAssignee()

@@ -2,6 +2,7 @@ package com.designs_1393.asana;
 
 import com.designs_1393.asana.workspace.*;
 import com.designs_1393.asana.project.*;
+import com.designs_1393.asana.task.*;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -240,10 +241,8 @@ public class DatabaseAdapter
 	/**
 	 * Sets the "projects" table to the data in the ProjectSet.
 	 * This should be used primarily to inject the ProjectSet parsed from
-	 * {@link AsanaAPI.getProjects( long workspaceID )}.  Note that this method
-	 * deletes the entire contents of the "projects" table first, and then
-	 * replaces them with the data in "projects".
-	 * @param projects  ProjectSet parsed from Asana's list of projects for a
+	 * {@link AsanaAPI.getProjects( long workspaceID )}.
+  	 * @param projects  ProjectSet parsed from Asana's list of projects for a
 	 *                  specific workspace.
 	 * @return          true if the operation was successful, false otherwise.
 	 */
@@ -296,8 +295,65 @@ public class DatabaseAdapter
 			}
 			c.close();
 		}
+		return true;
+	}
 
+	/**
+	 * Adds the provided tasks to the "tasks" table.
+	 * This should be used primarily to inject the TaskSet parsed from
+	 * {@link AsanaAPI.getTasks( long workspaceID )}.
+	 * @param tasks  TaskSet parsed from Asana's list of tasks for a specific
+	 *               project (or for tasks assigned to the user in a workspace).
+	 * @return       true if the operation was successful, false otherwise.
+	 */
+	public boolean addTasks( TaskSet tasks )
+	{
+		ContentValues values;
 
+		// Get array of tasks from TaskSet
+		Task[] taskArray = tasks.getData();
+
+		long insertResult = 0;
+
+		for( Task t : taskArray )
+		{
+			Cursor c = DB.query( TASKS_TABLE_NAME,
+			                     new String[] {TASKS_COL_WORKSPACE},
+			                     TASKS_COL_WORKSPACE +"=? AND "
+			                         +TASKS_COL_ASANA_ID +"=?",
+			                     new String[]
+			                         { String.valueOf(t.getWorkspaceID()),
+			                           String.valueOf(t.getID()) },
+			                     null, null, TASKS_COL_WORKSPACE );
+
+			if( c.getCount() == 0 )
+			{
+				values = new ContentValues();
+
+				values.put( TASKS_COL_ASANA_ID,    t.getID() );
+				values.put( TASKS_COL_ASSIGNEE,    t.getAssignee() );
+				values.put( TASKS_COL_CREATED_AT,  "created at" );
+				values.put( TASKS_COL_COMPLETED,   t.isCompleted() ? 1 : 0 );
+				values.put( TASKS_COL_MODIFIED_AT, "modified at" );
+				values.put( TASKS_COL_NAME,        t.getName() );
+				values.put( TASKS_COL_NOTES,       t.getNotes() );
+
+				// build space-separated string of projects
+				String projects = "";
+				for( long project : t.getProjects() )
+					projects += project;
+
+				values.put( TASKS_COL_PROJECT_IDS, projects );
+
+				values.put( TASKS_COL_WORKSPACE,   t.getWorkspaceID() );
+
+				insertResult = DB.insert( TASKS_TABLE_NAME, null, values );
+
+				if( insertResult == -1 )
+					return false;
+			}
+			c.close();
+		}
 		return true;
 	}
 }

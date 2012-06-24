@@ -239,6 +239,27 @@ public class DatabaseAdapter
 	}
 
 	/**
+	 * Returns a cursor containing all elements of the "tasks" table, from a
+	 * specific project, sorted in the order they're listed in on the website.
+	 * @param projectID the project in question
+	 * @return          Cursor containing the row ID and name for all tasks in
+	 *                  the project.
+	 */
+	public Cursor getTasks( long projectID )
+	{
+		String sorter = TASKS_COL_ID;
+
+		String[] cols = new String[]
+			{ TASKS_COL_ID,
+			  TASKS_COL_ASANA_ID,
+			  TASKS_COL_NAME,
+			  TASKS_COL_PROJECT_IDS };
+		String selection = TASKS_COL_PROJECT_IDS +" LIKE '%" +String.valueOf(projectID) +"%'";
+		return DB.query( TASKS_TABLE_NAME,
+			cols, selection, null, null, null, sorter );
+	}
+
+	/**
 	 * Sets the "projects" table to the data in the ProjectSet.
 	 * This should be used primarily to inject the ProjectSet parsed from
 	 * {@link AsanaAPI.getProjects( long workspaceID )}.

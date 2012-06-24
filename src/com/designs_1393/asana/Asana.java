@@ -1,11 +1,13 @@
 package com.designs_1393.asana;
 
 import com.designs_1393.asana.workspace.*;
+import com.designs_1393.asana.task.*;
 
 // General
 import android.os.Bundle;
 import android.content.SharedPreferences;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 import android.support.v4.app.DialogFragment;
@@ -167,7 +169,9 @@ public class Asana extends SherlockActivity
 				Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
 				Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
 
-				aFacade.retreiveTasks( projectID );
+				Intent newIntent = new Intent( ctx, TaskActivity.class );
+				newIntent.putExtra( "projectID", projectID );
+				startActivity( newIntent );
 
 				// we've handled the click, so return true
 				return true;

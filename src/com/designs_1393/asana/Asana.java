@@ -171,6 +171,7 @@ public class Asana extends SherlockActivity
 
 				Intent newIntent = new Intent( ctx, TaskActivity.class );
 				newIntent.putExtra( "projectID", projectID );
+				newIntent.putExtra( "projectName", projectName );
 				startActivity( newIntent );
 
 				// we've handled the click, so return true

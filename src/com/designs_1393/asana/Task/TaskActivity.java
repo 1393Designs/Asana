@@ -25,9 +25,10 @@ public class TaskActivity extends SherlockListActivity
 
 	private DatabaseAdapter dbAdapter;
 
-	AsanaFacade aFacade;
+	private AsanaFacade aFacade;
 
 	private long projectID = 0;
+	private String windowTitle = "Tasks";
 
 	/** Called when the activity is first created. */
 	@Override
@@ -40,8 +41,10 @@ public class TaskActivity extends SherlockListActivity
 		if( extras != null )
 		{
 			projectID = extras.getLong( "projectID" );
-			Log.i( APP_TAG, "projectID = " +projectID );
+			windowTitle = extras.getString( "projectName" );
 		}
+
+		getSupportActionBar().setTitle( windowTitle );
 
 		// store application context
 		ctx = getApplicationContext();

@@ -13,6 +13,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".task.TaskActivity"
+                  android:label="TaskList"
+                  android:configChanges="orientation|keyboardHidden">
+        </activity>
     </application>
 	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>

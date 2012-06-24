@@ -16,6 +16,7 @@ import android.database.Cursor;
 
 // Widgets
 import android.widget.TextView;
+import android.widget.CheckBox;
 
 // Base Class
 import android.widget.SimpleCursorAdapter;
@@ -40,12 +41,13 @@ public class TaskAdapter extends SimpleCursorAdapter
 	{
 		TextView title = (TextView) v.findViewById(R.id.task_name);
 		String name = c.getString(c.getColumnIndex(DatabaseAdapter.TASKS_COL_NAME));
+		title.setText(name);
+
+		CheckBox cb = (CheckBox) v.findViewById(R.id.task_done);
 
 		if( name.endsWith(":") )
-		{
-			v.findViewById(R.id.task_done).setVisibility(View.GONE);
-		}
-
-		title.setText(name);
+			cb.setVisibility(View.GONE);
+		else
+			cb.setVisibility(View.VISIBLE);
 	}
 }

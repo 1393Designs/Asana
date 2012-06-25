@@ -44,6 +44,10 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.app.ProgressDialog;
+
+// AsyncTask
+import android.os.AsyncTask;
 
 import android.util.Log;
 
@@ -64,8 +68,10 @@ public class Asana extends SherlockActivity
 
 	private DatabaseAdapter dbAdapter;
 
+	private AsyncTask loadTask;
 
-	private void showDialog()
+
+	private void showAPIkeyDialog()
 	{
 		View v = getLayoutInflater()
 		         .inflate(R.layout.apikeydialog, null);
@@ -94,6 +100,8 @@ public class Asana extends SherlockActivity
 							"api key",
 							apiKeyInput.getText().toString());
 						editor.commit();
+
+						loadTask.execute( new Void[] {} );
 					}
 				})
 			.setNegativeButton( "Cancel", new DialogInterface.OnClickListener() {
@@ -109,24 +117,56 @@ public class Asana extends SherlockActivity
 
 		// store application context
 		ctx = getApplicationContext();
-
-		sharedPrefs = getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
-
-		if(sharedPrefs.getString( "api key", "not found" ).equals("not found"))
-		{
-			showDialog();
-		}
-
+		final Context ctxCopy = this;
 
 		// get shared preferences containing API key
-		sharedPrefs = getSharedPreferences(
-			"AsanaPrefs",
-			Context.MODE_PRIVATE);
+		sharedPrefs = getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
 
 		// get and store workspaces from Asana
 		final AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
-		aFacade.retreiveWorkspaces();
-		aFacade.retreiveProjects();
+
+
+		loadTask = new AsyncTask<Void, String, Void>()
+		{
+			ProgressDialog loadDialog = new ProgressDialog( ctxCopy );
+			protected void onPreExecute()
+			{
+				loadDialog.setTitle( "Loading" );
+				loadDialog.setMessage( "Loading Workspaces" );
+				loadDialog.setIndeterminate(true);
+				loadDialog.setCancelable(true);
+
+				loadDialog.show();
+			}
+
+			protected Void doInBackground( Void... args )
+			{
+				aFacade.retreiveWorkspaces();
+				publishProgress( "Loading Projects" );
+				aFacade.retreiveProjects();
+
+				return null;
+			}
+
+			protected void onProgressUpdate( String... args )
+			{
+				loadDialog.setMessage( args[0] );
+			}
+
+			protected void onPostExecute( Void result )
+			{
+				((SherlockActivity)ctxCopy).onContentChanged();
+				Log.i( APP_TAG, "onPostExecute" );
+				loadDialog.dismiss();
+			}
+		};
+
+		if(sharedPrefs.getString( "api key", "not found" ).equals("not found"))
+		{
+			showAPIkeyDialog();
+		}
+		else
+			loadTask.execute( new Void[] {} );
 
 		// set layout content from the cache database
 		dbAdapter = new DatabaseAdapter( ctx );

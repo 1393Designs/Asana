@@ -22,6 +22,9 @@ import android.database.Cursor;
 import android.widget.ListView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.SpinnerAdapter;
 
 // ActionBarSherlock
 import com.actionbarsherlock.app.SherlockActivity;
@@ -30,10 +33,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-
-// Widgets
-import android.widget.TextView;
-import android.widget.EditText;
 
 // Links
 import android.text.util.Linkify;
@@ -44,6 +43,10 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+
+// ActionBar Navigation
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 
 import android.util.Log;
 
@@ -139,6 +142,7 @@ public class Asana extends SherlockActivity
 		final ExpandableListView elv = (ExpandableListView)findViewById(R.id.workspace_list);
 		workspaceList = elv;
 		workspaceAdapter = new ExpandableWorkspaceAdapter(ctx, workspaceCursor); // setAdapter
+
 		elv.setAdapter( workspaceAdapter );
 
 		elv.setOnChildClickListener( new OnChildClickListener() {
@@ -175,6 +179,20 @@ public class Asana extends SherlockActivity
 				startActivity( newIntent );
 
 				// we've handled the click, so return true
+				return true;
+			}
+		});
+
+		SpinnerAdapter spinAdapter = new WorkspaceAdapter(ctx, workspaceCursor);
+		((WorkspaceAdapter)spinAdapter).setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ActionBar ab = getSupportActionBar();
+		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+		ab.setListNavigationCallbacks(spinAdapter, new OnNavigationListener(){
+			@Override
+			public boolean onNavigationItemSelected( int position, long itemID )
+			{
+				Log.i( APP_TAG, "Click item at position: " +position );
 				return true;
 			}
 		});

@@ -15,8 +15,8 @@ public class WorkspaceAdapter extends SimpleCursorAdapter
 {
 	public WorkspaceAdapter( Context context, Cursor c )
 	{
-		super( context, R.layout.workspace_row, c,
-			new String[] {"workspace_name"},
-			new int[] {R.id.workspace_list_name} );
+		super( context, android.R.layout.simple_spinner_item, c,
+			new String[] {DatabaseAdapter.WORKSPACES_COL_NAME},
+			new int[] {android.R.id.text1} );
 	}
 }

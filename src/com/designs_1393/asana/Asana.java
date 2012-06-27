@@ -184,7 +184,6 @@ public class Asana extends SherlockActivity
 		});
 
 		SpinnerAdapter spinAdapter = new WorkspaceAdapter(ctx, workspaceCursor);
-		((WorkspaceAdapter)spinAdapter).setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		ActionBar ab = getSupportActionBar();
 		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 

@@ -16,7 +16,7 @@ public class ProjectAdapter extends SimpleCursorAdapter
 	public ProjectAdapter( Context context, Cursor c )
 	{
 		super( context, R.layout.project_row, c,
-			new String[] {"project_name"},
+			new String[] {DatabaseAdapter.PROJECTS_COL_NAME},
 			new int[] {R.id.project_list_name} );
 	}
 }

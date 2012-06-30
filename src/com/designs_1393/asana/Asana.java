@@ -1,6 +1,7 @@
 package com.designs_1393.asana;
 
 import com.designs_1393.asana.workspace.*;
+import com.designs_1393.asana.project.*;
 import com.designs_1393.asana.task.*;
 
 // General
@@ -27,7 +28,7 @@ import android.widget.EditText;
 import android.widget.SpinnerAdapter;
 
 // ActionBarSherlock
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
 
 // View
 import android.view.View;
@@ -53,7 +54,7 @@ import android.util.Log;
 /**
  * Main application activity.
  */
-public class Asana extends SherlockActivity
+public class Asana extends SherlockListActivity
 {
 	final String APP_TAG = "Asana";
 	private SharedPreferences sharedPrefs;
@@ -61,9 +62,10 @@ public class Asana extends SherlockActivity
 
 	private Context ctx;
 	private Cursor workspaceCursor;
+	private Cursor projectCursor;
 
-	private ExpandableWorkspaceAdapter workspaceAdapter;
-	private ExpandableListView workspaceList;
+	private ProjectAdapter projectAdapter;
+	private ListView workspaceList;
 
 	private DatabaseAdapter dbAdapter;
 
@@ -136,52 +138,21 @@ public class Asana extends SherlockActivity
 		dbAdapter.open();
 
 		workspaceCursor = dbAdapter.getWorkspaces( true );
+		workspaceCursor.moveToFirst();
+		long workspaceID = workspaceCursor.getLong(
+		                       workspaceCursor.getColumnIndex(
+		                           DatabaseAdapter.WORKSPACES_COL_ASANA_ID
+		                       )
+		                   );
+		projectCursor = dbAdapter.getProjects( workspaceID, true );
 
-		setContentView( R.layout.workspace_list );
+		setContentView( R.layout.project_list );
 
-		final ExpandableListView elv = (ExpandableListView)findViewById(R.id.workspace_list);
-		workspaceList = elv;
-		workspaceAdapter = new ExpandableWorkspaceAdapter(ctx, workspaceCursor); // setAdapter
+		final ListView lv = getListView();
+		workspaceList = lv;
+		projectAdapter = new ProjectAdapter(ctx, projectCursor);
 
-		elv.setAdapter( workspaceAdapter );
-
-		elv.setOnChildClickListener( new OnChildClickListener() {
-			public boolean onChildClick( ExpandableListView parent,
-										 View v,
-										 int groupPosition,
-										 int childPosition,
-										 long id )
-			{
-				Cursor childrenCursor = ((ExpandableWorkspaceAdapter)elv.getExpandableListAdapter())
-											.getChildrenCursor( workspaceCursor );
-				childrenCursor.moveToPosition( childPosition );
-
-				long projectID = childrenCursor.getLong(
-									 childrenCursor.getColumnIndex(
-										 DatabaseAdapter.PROJECTS_COL_ASANA_ID
-									 )
-								 );
-
-				String projectName = childrenCursor.getString(
-										 childrenCursor.getColumnIndex(
-											 DatabaseAdapter.PROJECTS_COL_NAME
-										 )
-									 );
-
-				childrenCursor.close();
-
-				Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
-				Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
-
-				Intent newIntent = new Intent( ctx, TaskActivity.class );
-				newIntent.putExtra( "projectID", projectID );
-				newIntent.putExtra( "projectName", projectName );
-				startActivity( newIntent );
-
-				// we've handled the click, so return true
-				return true;
-			}
-		});
+		setListAdapter( projectAdapter );
 
 		SpinnerAdapter spinAdapter = new WorkspaceAdapter(ctx, workspaceCursor);
 		ActionBar ab = getSupportActionBar();
@@ -200,26 +171,29 @@ public class Asana extends SherlockActivity
 
 	}
 
-	/**
-	 * Updates the screen state (current list and other views) when the
-	 * content changes.
-	 * Shamelessly modified from Android's ListActivity
-	 *
-	 * @see Activity#onContentChanged()
-	 */
-	@Override
-	public void onContentChanged() {
-		super.onContentChanged();
-		View emptyView = findViewById(R.id.no_workspaces);
-		workspaceList = (ExpandableListView)findViewById(R.id.workspace_list);
-		if (workspaceList == null) {
-			throw new RuntimeException(
-				"Your content must have a ListView whose id attribute is " +
-				"'android.R.id.list'");
-		}
-		if (emptyView != null) {
-			workspaceList.setEmptyView(emptyView);
-		}
-		workspaceList.setAdapter(workspaceAdapter);
+	public void onListItemClick( ListView parent,
+								 View v,
+								 int position,
+								 long id )
+	{
+		long projectID = projectCursor.getLong(
+							 projectCursor.getColumnIndex(
+								 DatabaseAdapter.PROJECTS_COL_ASANA_ID
+							 )
+						 );
+
+		String projectName = projectCursor.getString(
+								 projectCursor.getColumnIndex(
+									 DatabaseAdapter.PROJECTS_COL_NAME
+								 )
+							 );
+
+		Log.i( APP_TAG, "Project with ID: " +projectID +" clicked!" );
+		Log.i( APP_TAG, "Project with name: " +projectName +" clicked!" );
+
+		Intent newIntent = new Intent( ctx, TaskActivity.class );
+		newIntent.putExtra( "projectID", projectID );
+		newIntent.putExtra( "projectName", projectName );
+		startActivity( newIntent );
 	}
 }

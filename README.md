@@ -1,4 +1,6 @@
-#### Asana for Android This is an unofficial Android app for asana.com,
+#### Asana for Android
+
+This is an unofficial Android app for asana.com,
 utilizing the wornderful [ActionBarSherlock](http://actionbarsherlock.com) by
 Jake Wharton.  Because the project is so early in its life-cycle, there isn't
 much else to say here.

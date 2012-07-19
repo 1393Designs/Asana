@@ -1,16 +1,20 @@
 package com.designs_1393.asana;
 
-// Workspace classes
+// Asana classes
 import com.designs_1393.asana.workspace.Workspace;
 import com.designs_1393.asana.workspace.WorkspaceSet;
 import com.designs_1393.asana.project.Project;
 import com.designs_1393.asana.project.ProjectSet;
 import com.designs_1393.asana.task.Task;
 import com.designs_1393.asana.task.TaskSet;
+import com.designs_1393.asana.DatabaseProvider;
 
 // Android classes
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.ContentResolver;
+import android.net.Uri;
+import android.net.Uri.Builder;
 
 // Database
 import android.database.Cursor;

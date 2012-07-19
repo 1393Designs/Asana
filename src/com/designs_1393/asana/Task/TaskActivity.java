@@ -54,7 +54,6 @@ public class TaskActivity extends SherlockListActivity
 		aFacade = new AsanaFacade( sharedPrefs, ctx );
 
 		dbAdapter = new DatabaseAdapter( ctx );
-		dbAdapter.open();
 
 		aFacade.retreiveTasks( projectID );
 

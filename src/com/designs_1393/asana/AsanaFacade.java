@@ -63,8 +63,6 @@ public class AsanaFacade
 	 */
 	public void retreiveWorkspaces()
 	{
-		dbAdapter.open();
-
 		String workspacesJSON = ah.getWorkspaces();
 
 		try
@@ -81,7 +79,6 @@ public class AsanaFacade
 		{ e.printStackTrace(); }
 		finally
 		{
-			dbAdapter.close();
 		}
 	}
 
@@ -91,8 +88,6 @@ public class AsanaFacade
 	 */
 	public void retreiveProjects()
 	{
-		dbAdapter.open();
-
 		Cursor c = dbAdapter.getWorkspaces( true );
 
 		c.moveToFirst();
@@ -108,7 +103,6 @@ public class AsanaFacade
 			c.moveToNext();
 		}
 
-		dbAdapter.close();
 	}
 
 	/**
@@ -118,8 +112,6 @@ public class AsanaFacade
 	 */
 	public void retreiveProjects( long workspaceID )
 	{
-		dbAdapter.open();
-
 		String projectsJSON = ah.getProjectsInWorkspace( workspaceID );
 
 		Log.i( APP_TAG, "Retreiving for workspace: " +workspaceID );
@@ -144,7 +136,6 @@ public class AsanaFacade
 		{ e.printStackTrace(); }
 		finally
 		{
-			dbAdapter.close();
 		}
 	}
 
@@ -155,8 +146,6 @@ public class AsanaFacade
 	 */
 	public void retreiveTasks( long projectID )
 	{
-		dbAdapter.open();
-
 		String tasksJSON = ah.getTasks( projectID );
 
 		Log.i( APP_TAG, "Retreiving for project: " +projectID );
@@ -180,7 +169,6 @@ public class AsanaFacade
 		{ e.printStackTrace(); }
 		finally
 		{
-			dbAdapter.close();
 		}
 	}
 }

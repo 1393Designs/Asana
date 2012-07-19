@@ -135,7 +135,6 @@ public class Asana extends SherlockActivity
 
 		// set layout content from the cache database
 		dbAdapter = new DatabaseAdapter( ctx );
-		dbAdapter.open();
 
 		workspaceCursor = dbAdapter.getWorkspaces( true );
 
@@ -197,9 +196,6 @@ public class Asana extends SherlockActivity
 				return true;
 			}
 		});
-
-		dbAdapter.close();
-
 	}
 
 	/**

@@ -6,7 +6,11 @@ import com.designs_1393.asana.task.*;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.database.Cursor;
+
+import android.net.Uri;
+import android.net.Uri.Builder;
 
 import java.lang.Long;
 
@@ -167,11 +171,24 @@ public class DatabaseAdapter
 		if( sortAlphabetically )
 			sorter = WORKSPACES_COL_NAME;
 
-		return DB.query( WORKSPACES_TABLE_NAME,
-			new String[] {WORKSPACES_COL_ID,
-				WORKSPACES_COL_ASANA_ID,
-				WORKSPACES_COL_NAME},
-			null, null, null, null, sorter );
+		Uri uri = new Uri.Builder()
+		                 .scheme("content")
+		                 .authority("com.designs_1393.asana.provider")
+		                 .path("workspace")
+		                 .build();
+		String[] projection = new String[] { WORKSPACES_COL_ID,
+		                                     WORKSPACES_COL_ASANA_ID,
+		                                     WORKSPACES_COL_NAME };
+		String   selection     = null;
+		String[] selectionArgs = null;
+
+		CursorLoader cl = new CursorLoader( context,
+		                  uri,
+		                  projection,
+		                  selection,
+		                  selectionArgs,
+		                  sorter );
+		return cl.loadInBackground();
 	}
 
 	/** Sets the "workspaces" table to the data in the WorkspaceSet.

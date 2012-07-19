@@ -1,6 +1,7 @@
 package com.designs_1393.asana;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -245,11 +246,11 @@ public class DatabaseProvider extends ContentProvider
 		// If the insert succeeded, the row ID exists.
 		if (rowID > 0) {
 			// Creates a URI with the note ID pattern and the new row ID appended to it.
-			//Uri noteUri = ContentUris.withAppendedId(NotePad.Notes.CONTENT_ID_URI_BASE, rowId);
+			Uri updateURI = ContentUris.withAppendedId(baseURI, rowID);
 
 			// Notifies observers registered against this provider that the data changed.
-			//getContext().getContentResolver().notifyChange(noteUri, null);
-			//return noteUri;
+			getContext().getContentResolver().notifyChange(updateURI, null);
+			return updateURI;
 		}
 
 		// If the insert didn't succeed, then the rowID is <= 0. Throws an exception.

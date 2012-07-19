@@ -165,11 +165,11 @@ public class DatabaseAdapter
 		String[] selectionArgs = null;
 
 		CursorLoader cl = new CursorLoader( context,
-		                  uri,
-		                  projection,
-		                  selection,
-		                  selectionArgs,
-		                  sorter );
+		                                    uri,
+		                                    projection,
+		                                    selection,
+		                                    selectionArgs,
+		                                    sorter );
 		return cl.loadInBackground();
 	}
 

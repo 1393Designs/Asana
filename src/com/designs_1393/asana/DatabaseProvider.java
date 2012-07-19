@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.util.Log;
+
 public class DatabaseProvider extends ContentProvider
 {
 	/* Database Attribute Declarations */
@@ -103,6 +105,7 @@ public class DatabaseProvider extends ContentProvider
 	{
 		URImatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		URImatcher.addURI("com.designs_1393.asana.provider", "workspace", WORKSPACES);
+		URImatcher.addURI("com.designs_1393.asana.provider", "project", PROJECTS);
 	}
 
 	private DatabaseHelper DBhelper;
@@ -171,15 +174,28 @@ public class DatabaseProvider extends ContentProvider
 		{
 			case WORKSPACES:
 				c = DB.query( WORKSPACES_TABLE_NAME,
-					new String[] {WORKSPACES_COL_ID,
-						WORKSPACES_COL_ASANA_ID,
-						WORKSPACES_COL_NAME},
-					null, null, null, null, WORKSPACES_COL_NAME );
+				              projection,
+				              selection,
+				              selectionArgs,
+				              null,
+				              null,
+				              WORKSPACES_COL_NAME );
+				break;
+			case PROJECTS:
+				c = DB.query( PROJECTS_TABLE_NAME,
+				              projection,
+				              selection,
+				              selectionArgs,
+				              null,
+				              null,
+				              sortOrder );
 				break;
 			default:
 				break;
 		}
 
+		if( c == null )
+			Log.i( APP_TAG, "========== CURSOR IS NULL ==========");
 		c.setNotificationUri( getContext().getContentResolver(), uri );
 		return c;
 	}

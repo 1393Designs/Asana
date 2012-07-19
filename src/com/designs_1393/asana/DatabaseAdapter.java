@@ -279,16 +279,27 @@ public class DatabaseAdapter
 
 		long insertResult = 0;
 
+		Uri uri = new Uri.Builder()
+		                 .scheme("content")
+		                 .authority("com.designs_1393.asana.provider")
+		                 .path("project")
+		                 .build();
+
+		String[] projection    = new String[] { PROJECTS_COL_WORKSPACE };
+		String   selection     = PROJECTS_COL_WORKSPACE +"+? AND " +PROJECTS_COL_NAME +"=?";
+		String[] selectionArgs = null;
+		String   sorter        = PROJECTS_COL_WORKSPACE;
+
 		for( Project p : projectArray )
 		{
-			Cursor c = DB.query( PROJECTS_TABLE_NAME,
-			                     new String[] {PROJECTS_COL_WORKSPACE},
-			                     PROJECTS_COL_WORKSPACE +"=? AND "
-			                         +PROJECTS_COL_NAME +"=?",
-			                     new String[]
-			                         { String.valueOf(p.getWorkspaceID()),
-			                          p.getName() },
-			                     null, null, PROJECTS_COL_WORKSPACE );
+			selectionArgs = new String[] { String.valueOf(p.getWorkspaceID()),
+			                               p.getName() };
+			Cursor c = context.getContentResolver().query( uri,
+			                                               projection,
+			                                               selection,
+			                                               selectionArgs,
+			                                               sorter );
+
 			if( c.getCount() == 0 )
 			{
 

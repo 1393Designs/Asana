@@ -186,8 +186,11 @@ public class DatabaseAdapter
 		// TODO: Handle rollback if "insert" fails?  Maybe this is possible
 		// with some a conflict clause?
 
-		// delete contents
-		DB.delete( WORKSPACES_TABLE_NAME, null, null );
+		Uri uri = new Uri.Builder()
+		                 .scheme("content")
+		                 .authority("com.designs_1393.asana.provider")
+		                 .path("workspace")
+		                 .build();
 
 		ContentValues values;
 
@@ -203,12 +206,10 @@ public class DatabaseAdapter
 			values.put( WORKSPACES_COL_ASANA_ID, workspaceArray[i].getID()   );
 			values.put( WORKSPACES_COL_NAME,     workspaceArray[i].getName() );
 
-			insertResult = DB.insert( WORKSPACES_TABLE_NAME, null, values );
-			if( insertResult == -1 )
-				return false;
+			context.getContentResolver().insert( uri, values );
 		}
 
-		return true;
+		return true; // TODO: Make this dynamic
 	}
 
 	/**

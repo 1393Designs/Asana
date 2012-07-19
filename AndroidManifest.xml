@@ -5,6 +5,11 @@
       android:versionName="1.0">
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
 		android:theme="@style/Theme.Sherlock.Light">
+		<provider
+				  android:authorities="com.designs_1393.asana.provider"
+				  android:enabled="true"
+				  android:exported="false"
+				  android:name="com.designs_1393.asana.DatabaseProvider"/>
         <activity android:name="Asana"
                   android:label="@string/app_name"
                   android:configChanges="orientation|keyboardHidden">

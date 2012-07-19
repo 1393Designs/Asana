@@ -45,6 +45,18 @@ public class DatabaseProvider extends ContentProvider
 	public static final String DATABASE_NAME           = "asana_data";
 	public static final int    DATABASE_VERSION        = 1;
 
+	/* URI Data */
+	public static final String SCHEME         = "content";
+	public static final String AUTHORITY      = "com.designs_1393.asana.provider";
+	public static final String WORKSPACE_PATH = "workspace";
+	public static final String PROJECT_PATH   = "project";
+
+	// The incoming URI matches the Workspaces URI pattern
+	private static final int WORKSPACES = 1;
+
+	// The incoming URI matches the Projects URI pattern
+	private static final int PROJECTS   = 2;
+
 
 	/* Table CREATE Commands */
 	private static final String WORKSPACES_TABLE_CREATE =
@@ -78,9 +90,6 @@ public class DatabaseProvider extends ContentProvider
 		+TASKS_COL_PROJECT_IDS    +" TEXT NOT NULL, "
 		+TASKS_COL_WORKSPACE      +" INTEGER NOT NULL);";
 
-	/* URI matcher constants */
-	// The incoming URI matches the Workspaces URI pattern
-	private static final int WORKSPACES = 1;
 
 
 	/* Class Member Objects */

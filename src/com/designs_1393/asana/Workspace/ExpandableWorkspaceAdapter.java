@@ -39,7 +39,6 @@ public class ExpandableWorkspaceAdapter extends SimpleCursorTreeAdapter
 
 		ctx = context;
 		db = new DatabaseAdapter(ctx);
-		db.open();
 	}
 
 	/**

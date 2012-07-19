@@ -93,6 +93,7 @@ public class DatabaseProvider extends ContentProvider
 	static
 	{
 		URImatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		URImatcher.addURI("com.designs_1393.asana.provider", "workspace", WORKSPACES);
 	}
 
 	private DatabaseHelper DBhelper;

@@ -113,27 +113,28 @@ public class Asana extends SherlockActivity
 		// store application context
 		ctx = getApplicationContext();
 
+		// get shared preferences containing API key
 		sharedPrefs = getSharedPreferences("AsanaPrefs", Context.MODE_PRIVATE);
+
+		final AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
 
 		if(sharedPrefs.getString( "api key", "not found" ).equals("not found"))
 		{
+			Log.i( APP_TAG, "----- SHOWING API DIALOG -----" );
 			showDialog();
+		}
+		else
+		{
+			aFacade.retreiveWorkspaces();
+			aFacade.retreiveProjects();
 		}
 
 
-		// get shared preferences containing API key
-		sharedPrefs = getSharedPreferences(
-			"AsanaPrefs",
-			Context.MODE_PRIVATE);
-
 		// get and store workspaces from Asana
-		final AsanaFacade aFacade = new AsanaFacade( sharedPrefs, ctx );
-		aFacade.retreiveWorkspaces();
-		aFacade.retreiveProjects();
+
 
 		// set layout content from the cache database
 		dbAdapter = new DatabaseAdapter( ctx );
-		dbAdapter.open();
 
 		workspaceCursor = dbAdapter.getWorkspaces( true );
 
@@ -195,9 +196,6 @@ public class Asana extends SherlockActivity
 				return true;
 			}
 		});
-
-		dbAdapter.close();
-
 	}
 
 	/**

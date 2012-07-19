@@ -61,11 +61,9 @@ public class WorkspacesFragment extends SherlockListFragment
 
 		// set layout content from the cache database
 		dbAdapter = new DatabaseAdapter( ctx );
-		dbAdapter.open();
 
 		workspaceCursor = dbAdapter.getWorkspaces( true );
 		setListAdapter( (ListAdapter)(new ExpandableWorkspaceAdapter( ctx, workspaceCursor )) );
-		dbAdapter.close();
 	}
 
 	@Override

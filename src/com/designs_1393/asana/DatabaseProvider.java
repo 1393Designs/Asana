@@ -230,13 +230,20 @@ public class DatabaseProvider extends ContentProvider
 		// Opens the database object in "write" mode.
 		SQLiteDatabase DB = DBhelper.getWritableDatabase();
 
+		Uri baseURI = null;
 		String insertTable = "";
 		switch( URImatcher.match(uri) )
 		{
 			case WORKSPACES:
 				insertTable = WORKSPACES_TABLE_NAME;
+				baseURI = Uri.parse( SCHEME + AUTHORITY + WORKSPACE_PATH );
+				break;
+			case PROJECTS:
+				insertTable = PROJECTS_TABLE_NAME;
+				baseURI = Uri.parse( SCHEME + AUTHORITY + PROJECT_PATH );
 				break;
 			default:
+				baseURI = Uri.parse( "" );
 				break;
 		}
 

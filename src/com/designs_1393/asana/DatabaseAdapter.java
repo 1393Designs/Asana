@@ -137,24 +137,6 @@ public class DatabaseAdapter
 		}
 	}
 
-	/**
-	 * Opens the database helper for writing and returns the database adapter.
-	 * @return  Database adapter associated with the database.
-	 */
-	public DatabaseAdapter open() throws SQLException
-	{
-		DBhelper = new DatabaseHelper( this.context );
-		DB = DBhelper.getWritableDatabase();
-		return this;
-	}
-
-	/** Closes the database helper
-	 */
-	public void close()
-	{
-		DBhelper.close();
-	}
-
 	/** Returns a cursor containing every element of the "workspaces" table,
 	 *  sorted either alphabetically or in the order they're in on the website.
 	 *  @param sortAlphabetically  Whether to return the workspaces in

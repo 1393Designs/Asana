@@ -321,13 +321,11 @@ public class DatabaseAdapter
 				values.put( PROJECTS_COL_NOTES,       "NOTES" );
 				values.put( PROJECTS_COL_WORKSPACE,   p.getWorkspaceID() );
 
-				insertResult = DB.insert( PROJECTS_TABLE_NAME, null, values );
-				if( insertResult == -1 )
-					return false;
+				context.getContentResolver().insert( uri, values );
 			}
 			c.close();
 		}
-		return true;
+		return true; // TODO: Make this dynamic
 	}
 
 	/**

@@ -186,12 +186,6 @@ public class DatabaseAdapter
 		// TODO: Handle rollback if "insert" fails?  Maybe this is possible
 		// with some a conflict clause?
 
-		Uri uri = new Uri.Builder()
-		                 .scheme("content")
-		                 .authority("com.designs_1393.asana.provider")
-		                 .path("workspace")
-		                 .build();
-
 		ContentValues values;
 
 		// Get array of workspaces from WorkspaceSet
@@ -199,14 +193,40 @@ public class DatabaseAdapter
 
 		long insertResult = 0;
 
-		for( int i = 0; i < workspaceArray.length; i++ )
+		Uri uri = new Uri.Builder()
+		                 .scheme("content")
+		                 .authority("com.designs_1393.asana.provider")
+		                 .path("workspace")
+		                 .build();
+
+		String[] projection    = new String[] { WORKSPACES_COL_ASANA_ID };
+		String   selection     = WORKSPACES_COL_ASANA_ID +"=?";
+		String[] selectionArgs = null;
+		String   sorter        = PROJECTS_COL_WORKSPACE;
+
+		for( Workspace w : workspaceArray )
 		{
-			values = new ContentValues();
+			selectionArgs = new String[] { String.valueOf(w.getID()) };
+			Cursor c = context.getContentResolver().query( uri,
+			                                               projection,
+			                                               selection,
+			                                               selectionArgs,
+			                                               sorter );
 
-			values.put( WORKSPACES_COL_ASANA_ID, workspaceArray[i].getID()   );
-			values.put( WORKSPACES_COL_NAME,     workspaceArray[i].getName() );
+			if( c.getCount() != 0 )
+			{
+				Log.i( APP_TAG, "Adding workspace " +w.getID() );
+				values = new ContentValues();
 
-			context.getContentResolver().insert( uri, values );
+				values.put( WORKSPACES_COL_ASANA_ID, w.getID()   );
+				values.put( WORKSPACES_COL_NAME,     w.getName() );
+
+				context.getContentResolver().insert( uri, values );
+			}
+			else
+			{
+				Log.i( APP_TAG, "Workspace " +w.getID() +" already added" );
+			}
 		}
 
 		return true; // TODO: Make this dynamic
@@ -286,7 +306,7 @@ public class DatabaseAdapter
 		                 .build();
 
 		String[] projection    = new String[] { PROJECTS_COL_WORKSPACE };
-		String   selection     = PROJECTS_COL_WORKSPACE +"+? AND " +PROJECTS_COL_NAME +"=?";
+		String   selection     = PROJECTS_COL_WORKSPACE +"=? AND " +PROJECTS_COL_NAME +"=?";
 		String[] selectionArgs = null;
 		String   sorter        = PROJECTS_COL_WORKSPACE;
 

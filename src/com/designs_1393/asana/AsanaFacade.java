@@ -98,6 +98,7 @@ public class AsanaFacade
 			                           DatabaseAdapter.WORKSPACES_COL_ASANA_ID
 			                       )
 			                   );
+			Log.i( APP_TAG, "Cursor index: " +i +"\tWorkspace ID: " +workspaceID );
 
 			retreiveProjects( workspaceID );
 			c.moveToNext();
@@ -114,7 +115,7 @@ public class AsanaFacade
 	{
 		String projectsJSON = ah.getProjectsInWorkspace( workspaceID );
 
-		Log.i( APP_TAG, "Retreiving for workspace: " +workspaceID );
+		Log.i( APP_TAG, "Retreiving projects for workspace: " +workspaceID );
 		Log.i( APP_TAG, "JSON: " +projectsJSON );
 
 		try

@@ -6,7 +6,7 @@ import com.designs_1393.asana.task.*;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
+import android.support.v4.content.CursorLoader;
 import android.database.Cursor;
 
 import android.net.Uri;
@@ -20,6 +20,9 @@ import android.util.Log;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+// Loader
+import android.support.v4.content.Loader;
 
 public class DatabaseAdapter
 {
@@ -92,7 +95,6 @@ public class DatabaseAdapter
 	/* Class Member Objects */
 	private static final String APP_TAG = "Asana.DatabaseAdapter";
 
-	private DatabaseHelper DBhelper;
 	private SQLiteDatabase DB;
 
 	private final Context context;
@@ -107,34 +109,39 @@ public class DatabaseAdapter
 		this.context = callingApplicationsContext;
 	}
 
-	/* Inner class providing a databse upgrade process. */
-	private static class DatabaseHelper extends SQLiteOpenHelper
+	/** Returns a cursor loader used to load the database's workspaces,
+	 *  sorted either alphabetically or in the order they're in on the website.
+	 *  @param sortAlphabetically  Whether to return the workspaces in
+	 *                             alphabetical order or in the order they
+	 *                             appear on asana.com
+	 *
+	 *  @return                    Loader fetching a cursor, containing the row
+	 *                             ID, short name, and Asana workspace ID for
+	 *                             each workspace in the table.
+	 */
+	public Loader<Cursor> getWorkspacesLoader( boolean sortAlphabetically )
 	{
-		/** Class constructor.
-		 *  Retains calling application's context, so that it can be used in
-		 *  additional functions.
-		 *  @param context  Calling application's context
-		 */
-		DatabaseHelper( Context context )
-		{
-			super( context, DATABASE_NAME, null, DATABASE_VERSION );
-		}
+		String sorter = WORKSPACES_COL_ASANA_ID;
+		if( sortAlphabetically )
+			sorter = WORKSPACES_COL_NAME;
 
-		@Override
-		public void onCreate( SQLiteDatabase db )
-		{
-			db.execSQL( WORKSPACES_TABLE_CREATE );
-			db.execSQL( PROJECTS_TABLE_CREATE );
-			db.execSQL( TASKS_TABLE_CREATE );
-		}
+		Uri uri = new Uri.Builder()
+		                 .scheme("content")
+		                 .authority("com.designs_1393.asana.provider")
+		                 .path("workspace")
+		                 .build();
+		String[] projection = new String[] { WORKSPACES_COL_ID,
+		                                     WORKSPACES_COL_ASANA_ID,
+		                                     WORKSPACES_COL_NAME };
+		String   selection     = null;
+		String[] selectionArgs = null;
 
-		@Override
-		public void onUpgrade( SQLiteDatabase db,
-			                   int oldVersion,
-			                   int newVersion )
-		{
-			// nothing required here yet
-		}
+		return new CursorLoader( context,
+		                         uri,
+		                         projection,
+		                         selection,
+		                         selectionArgs,
+		                         sorter );
 	}
 
 	/** Returns a cursor containing every element of the "workspaces" table,
@@ -172,6 +179,8 @@ public class DatabaseAdapter
 		                                    sorter );
 		return cl.loadInBackground();
 	}
+
+
 
 	/** Sets the "workspaces" table to the data in the WorkspaceSet.
 	 *  This should be used primarily to inject the WorkspaceSet parsed from

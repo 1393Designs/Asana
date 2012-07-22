@@ -49,12 +49,22 @@ import android.content.DialogInterface.OnClickListener;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 
+// LoaderManager
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.widget.SimpleCursorAdapter;
+
+// Uri
+import android.net.Uri;
+
 import android.util.Log;
 
 /**
  * Main application activity.
  */
 public class Asana extends SherlockListActivity
+	implements LoaderManager.LoaderCallbacks<Cursor>
 {
 	final String APP_TAG = "Asana";
 	private SharedPreferences sharedPrefs;
@@ -64,6 +74,7 @@ public class Asana extends SherlockListActivity
 	private Cursor workspaceCursor;
 	private Cursor projectCursor;
 
+	private SpinnerAdapter spinAdapter;
 	private ProjectAdapter projectAdapter;
 	private ExpandableListView workspaceList;
 
@@ -137,10 +148,20 @@ public class Asana extends SherlockListActivity
 			dbAdapter = new DatabaseAdapter( ctx );
 
 			// set ActionBar navigation adapter
-			workspaceCursor = dbAdapter.getWorkspaces( true );
-			SpinnerAdapter spinAdapter = new WorkspaceAdapter(ctx, workspaceCursor);
+			//workspaceCursor = dbAdapter.getWorkspaces( true );
+			//SpinnerAdapter spinAdapter = new WorkspaceAdapter(ctx, workspaceCursor);
+			spinAdapter =
+				new SimpleCursorAdapter( ctx,
+				                         android.R.layout.simple_spinner_item,
+				                         null,
+				                         new String[] {DatabaseProvider.WORKSPACES_COL_NAME},
+				                         new int[] {android.R.id.text1} );
 			ActionBar ab = getSupportActionBar();
 			ab.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+			// prepare the loader. Either re-connect with an existing one or
+			// start a new one.
+			getLoaderManager().initLoader(0, null, this);
 
 			ab.setListNavigationCallbacks(spinAdapter, new OnNavigationListener(){
 				@Override
@@ -165,9 +186,39 @@ public class Asana extends SherlockListActivity
 			projectAdapter = new ProjectAdapter(ctx, workspaceCursor);
 			setListAdapter( projectAdapter );
 
-		}
+		} // else
+	}// onCreate
 
 
+	public Loader<Cursor> onCreateLoader(int id, Bundle args)
+	{
+		// This is called when a new Loader needs to be created.
+/*		Uri baseUri = null;
+		switch(id)
+		{
+			case 0:
+				dbAdapter.getWorkspacesLoader( true );
+				break;
+			default:
+				break;
+		}*/
+		return null;
+	}
+
+
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data)
+	{
+		// swap the new cursor in.  (The framework will take care of closing
+		// the old cursor once we return.
+		((SimpleCursorAdapter)spinAdapter).swapCursor(data);
+	}
+
+	public void onLoaderReset(Loader<Cursor> loader)
+	{
+		// This is called when the last Cursor provided to onLoadFinished above
+		// is about to be closed.  We need to make sure we are no longer using
+		// it.
+		((SimpleCursorAdapter)spinAdapter).swapCursor(null);
 	}
 }
 

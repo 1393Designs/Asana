@@ -54,6 +54,10 @@ public class DatabaseProvider extends ContentProvider
 	public static final String WORKSPACE_PATH = "workspace";
 	public static final String PROJECT_PATH   = "project";
 
+	/* URIs */
+	public static final Uri WORKSPACE_URI = Uri.parse(SCHEME + AUTHORITY + WORKSPACE_PATH);
+	public static final Uri PROJECT_URI = Uri.parse(SCHEME + AUTHORITY + PROJECT_PATH);
+
 	// The incoming URI matches the Workspaces URI pattern
 	private static final int WORKSPACES = 1;
 

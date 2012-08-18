@@ -1,5 +1,8 @@
 package com.designs_1393.asana;
 
+
+import com.loopj.android.http.*;
+
 import com.designs_1393.asana.workspace.*;
 import com.designs_1393.asana.task.*;
 

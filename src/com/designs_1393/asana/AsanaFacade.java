@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.*;
 
 import android.util.Log;
 
+import com.loopj.android.http.*;
+
 /**
  * Facade pattern around AsanaAPI to automate the process of storing things in
  * the cache database.
@@ -46,9 +48,8 @@ public class AsanaFacade
 		preferences = prefs;
 		context = ctx;
 
-		ah = new AsanaAPI( preferences.getString(
-			"api key",
-			"No API key.") );
+		AsanaRestClient.setAPIkey( prefs.getString( "api key", "not found" ) );
+		ah = new AsanaAPI();
 		ah.usePrettyPrint( true ); // DBG
 		dbAdapter = new DatabaseAdapter( context );
 	}
@@ -59,26 +60,35 @@ public class AsanaFacade
 	 */
 	public void retreiveWorkspaces()
 	{
-		dbAdapter.open();
-
-		String workspacesJSON = ah.getWorkspaces();
-
 		try
 		{
-			// map the received JSON to a WorkspaceSet
-			WorkspaceSet workspaces = mapper.readValue(
-				workspacesJSON,
-				WorkspaceSet.class );
+			AsanaRestClient.get("workspaces/", null, new AsyncHttpResponseHandler(){
+			@Override
+			public void onSuccess(String response)
+			{
+				try{
+					dbAdapter.open();
 
-			// write the WorkspaceSet to the cache database
-			dbAdapter.setWorkspaces( workspaces );
+					Log.i(APP_TAG, response);
+
+					// map the received JSON to a WorkspaceSet
+					WorkspaceSet workspaces = mapper.readValue(
+						response,
+						WorkspaceSet.class );
+
+					// write the WorkspaceSet to the cache database
+					dbAdapter.setWorkspaces( workspaces );
+				}
+				catch(Exception e)
+				{ e.printStackTrace(); }
+				finally
+				{
+					dbAdapter.close();
+				}
+			}});
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }
-		finally
-		{
-			dbAdapter.close();
-		}
 	}
 
 	/**

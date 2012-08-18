@@ -30,6 +30,8 @@ import android.util.Log;
 
 import java.net.URLEncoder;
 
+import com.loopj.android.http.*;
+
 public class AsanaAPI
 {
 	private UsernamePasswordCredentials creds;
@@ -39,11 +41,6 @@ public class AsanaAPI
 	private final Uri API_BASE = Uri.parse( "https://app.asana.com/api/1.0" );
 	private final String TAG = "AsanaHelper";
 
-	public AsanaAPI( String APIkey )
-	{
-		creds = new UsernamePasswordCredentials(APIkey, "");
-	}
-
 	public void usePrettyPrint( boolean choice )
 	{
 		usePrettyPrint = choice;
@@ -52,19 +49,13 @@ public class AsanaAPI
 	public String getWorkspaces()
 	{
 		try{
-			Uri.Builder uri = API_BASE.buildUpon();
-			uri.appendPath( "workspaces" );
-			if( usePrettyPrint )
-				uri.appendQueryParameter( "opt_pretty", "true" );
-
-			HttpGet httpget = new HttpGet( uri.build().toString() );
-			httpget.addHeader( BasicScheme.authenticate(creds, "US-ASCII", false) );
-
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-
-			String responseBody = httpclient.execute(httpget, responseHandler);
-			return responseBody;
-		} catch( Exception e ){ e.printStackTrace(); }
+			AsanaRestClient.get("workspaces/", null, new AsyncHttpResponseHandler(){
+			@Override
+			public void onSuccess(String response)
+			{
+				Log.i(TAG, response);
+			}});
+		} catch(Exception e){e.printStackTrace();}
 
 		return "";
 	}

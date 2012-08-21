@@ -2,10 +2,12 @@ package com.designs_1393.asana;
 
 import com.loopj.android.http.*;
 import org.apache.http.auth.AuthScope;
+import android.util.Log;
 
 public class AsanaRestClient
 {
 	private static final String BASE_URL = "https://app.asana.com/api/1.0/";
+	private static final String APP_TAG = "Asana.AsanaRestClient";
 
 	private static AsyncHttpClient client = new AsyncHttpClient();
 
@@ -35,6 +37,8 @@ public class AsanaRestClient
 	{
 		// we use the API key as the username and an empty password, as per the
 		// Asana API docs.
-		client.setBasicAuth(APIkey, "", new AuthScope("asana.com", 80, AuthScope.ANY_REALM));
+		//client.setBasicAuth(APIkey, "", new AuthScope("asana.com", 80, AuthScope.ANY_REALM));
+		Log.i(APP_TAG, "APIkey = " +APIkey);
+		client.setBasicAuth(APIkey+":", "");
 	}
 }

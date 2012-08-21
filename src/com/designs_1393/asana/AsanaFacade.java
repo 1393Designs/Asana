@@ -60,32 +60,47 @@ public class AsanaFacade
 	 */
 	public void retreiveWorkspaces()
 	{
+		Log.i(APP_TAG, "<----- retreiveWorkspaces()");
 		try
 		{
 			AsanaRestClient.get("workspaces/", null, new AsyncHttpResponseHandler(){
-			@Override
-			public void onSuccess(String response)
-			{
-				try{
-					dbAdapter.open();
-
-					Log.i(APP_TAG, response);
-
-					// map the received JSON to a WorkspaceSet
-					WorkspaceSet workspaces = mapper.readValue(
-						response,
-						WorkspaceSet.class );
-
-					// write the WorkspaceSet to the cache database
-					dbAdapter.setWorkspaces( workspaces );
-				}
-				catch(Exception e)
-				{ e.printStackTrace(); }
-				finally
+				@Override
+				public void onStart()
 				{
-					dbAdapter.close();
+					Log.i(APP_TAG, "<----- request started!");
 				}
-			}});
+
+				@Override
+				public void onSuccess(String response)
+				{
+					try{
+						dbAdapter.open();
+
+						Log.i(APP_TAG, response);
+
+						// map the received JSON to a WorkspaceSet
+						WorkspaceSet workspaces = mapper.readValue(
+							response,
+							WorkspaceSet.class );
+
+						// write the WorkspaceSet to the cache database
+						dbAdapter.setWorkspaces( workspaces );
+					}
+					catch(Exception e)
+					{ e.printStackTrace(); }
+					finally
+					{
+						dbAdapter.close();
+					}
+				}
+
+				@Override
+				public void onFailure(Throwable e, String response)
+				{
+					Log.i(APP_TAG, "<----- REQUEST FAILED");
+					Log.i(APP_TAG, response);
+				}
+			});
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }
